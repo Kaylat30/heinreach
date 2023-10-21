@@ -8,18 +8,22 @@ export const addProducts = async (req,res) =>
         const {
             name,
             image,
-            price,
+            initialprice,
             discount,
             description,
             category,
             quantity
         } = req.body
 
+        // Calculate the final price based on the initial price and discount percentage
+        const finalprice = initialprice - (initialprice * (discount / 100));
+
         const newProduct = new Product({
             name,
             image,
-            price,
+            initialprice,
             discount,
+            finalprice,
             description,
             category,
             quantity
@@ -36,7 +40,14 @@ export const addProducts = async (req,res) =>
 export const getProducts = async (req,res) =>
 {
     try {
-        let products = await Product.find({})
+         let products //= await Product.find({})
+         if (req.user) {
+            // User is authenticated, retrieve all products
+            products = await Product.find({});
+        } else {
+            // User is not authenticated, send a 401 status code and a message
+            return res.status(401).json({ error: "Unauthorized: No token provided" });
+        }        
 
         const {cat,dis,maxprice,minprice} = req.query
 
@@ -58,21 +69,21 @@ export const getProducts = async (req,res) =>
         if (maxprice && minprice) {
             const minPrice = parseFloat(minprice);
             const maxPrice = parseFloat(maxprice);
-            products = products.filter((product) => product.price >= minPrice && product.price <= maxPrice);
+            products = products.filter((product) => product.finalprice >= minPrice && product.finalprice <= maxPrice);
         } else if (minprice) {
             const minPrice = parseFloat(minprice);
-            products = products.filter((product) => product.price >= minPrice);
+            products = products.filter((product) => product.finalprice >= minPrice);
         } else if (maxprice) {
             const maxPrice = parseFloat(maxprice);
-            products = products.filter((product) => product.price <= maxPrice);
+            products = products.filter((product) => product.finalprice <= maxPrice);
         }
 
         //if no products matched the search
         if(products.length<1)
         {
-            res.status(200).json({success:true,data:[],message:"No products matched your search"})
+            return res.status(200).json({success:true,data:[],message:"No products matched your search"})
         }
-
+        console.log(req.user)
         return res.status(200).json(products)
     } catch (error) {
         res.status(500).send({error : error.message})

@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import User from "../models/User.js"
+import Cart from "../models/Cart.js"
 
 //register user
 export const register = async (req,res) =>
@@ -51,9 +52,30 @@ export const login = async(req,res)=>{
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
         delete user.password
 
+        // After successful login, check if there are items in the cart with the user's session ID
+        const sessionID = req.sessionID;
+        const cartItemsToUpdate = await Cart.find({ sessionID: sessionID });
+
+        if (cartItemsToUpdate.length > 0) {
+            // Update the user field to associate these items with the logged-in use
+            const userID = user._id;
+            await Cart.updateMany(
+                { _id: { $in: cartItemsToUpdate.map((item) => item._id) }, user: null },
+                { user: userID }
+            );
+        }
+
         res.status(200).json({token, user})
     }catch(err)
     {
         res.status(500).json({error: err.message})
     }
-}     
+}  
+
+export const logout = async (req, res) => {
+    // Clear the session data on the server side
+    await req.session.destroy();
+  
+    // Redirect the user to the login page
+    res.redirect('/login');
+};

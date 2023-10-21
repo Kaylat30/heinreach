@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
 export const verifytoken = async(req,res,next)=>{
     try {
@@ -15,7 +16,13 @@ export const verifytoken = async(req,res,next)=>{
         }
 
         const verified = jwt.verify(token, process.env.JWT_SECRET)
-        register.user = verified
+        const user = await User.findById(verified.id);
+
+        if (!user) {
+            return res.status(403).send("Invalid User");
+        }
+
+        req.user = user;
         next()
     } catch (err) {
         res.status(500).json({error: err.message})

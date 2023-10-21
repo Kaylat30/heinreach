@@ -11,7 +11,11 @@ const ProductSchema = new mongoose.Schema(
             type:String,
             required:true,
         },
-        price:{
+        initialprice:{
+            type: Number,
+            required:true,
+        },
+        finalprice:{
             type: Number,
             required:true,
         },

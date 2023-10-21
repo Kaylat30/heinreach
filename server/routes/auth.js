@@ -1,10 +1,10 @@
 import express from "express";
-import {login, register} from "../controllers/auth.js"
-import { verifytoken } from "../middleware/auth.js"
-import User from "../models/User.js";
+import {login, logout, register} from "../controllers/auth.js"
+import { checkEmailExists } from "../middleware/checkEmailExists.js";
 
 const router = express.Router()
 router.post("/login",login)
-router.post("/signup",register)
+router.post("/signup",checkEmailExists,register)
+router.post("/logout",logout)
 
-export {login, register}
+export {login, register,logout}
