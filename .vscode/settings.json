@@ -1,0 +1,5 @@
+{
+    "rest-client.followredirect": true,
+    "rest-client.logLevel": "error",
+    "rest-client.useContentDispositionFilename": true
+}

@@ -1,75 +1,49 @@
 import { IoChevronForward,IoChevronBack, IoTrashBin, IoAlertCircleOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link,defer,useLoaderData } from "react-router-dom";
+import { getProducts } from "../api";
 import iphone from "../imgs/Apple_Iphone_14.png" ;
-import slide_img1 from '../imgs/slide_img1.jpg'; 
-import slide_img2 from '../imgs/slide_img2.jpg'; 
-import slide_img3 from '../imgs/slide_img3.jpg'; 
-import slide_img4 from "../imgs/slide_img4.jpg" 
+
+function shuffleArray(array) {
+  
+  const shuffled = [...array]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+export async function loader() {
+  const loadedProducts = await getProducts();
+  const shuffledProducts = shuffleArray(loadedProducts);
+  return defer({ products: shuffledProducts });
+}
 export default function Cart()
 {
-    const imagescroll = [
-        {
-          image: slide_img1, 
-          category: "Gaming",
-          name: "Infinix Hot 30 Play",
-          price: 239000     
-        },
-        {
-          image: slide_img2,
-          category: "Gaming" ,
-          name: "Hp Elite X2",
-          price: 239000 
-        },
-        {
-          image: slide_img3,
-          category: "Gaming",
-          name: "Electric dry Iron",
-          price: 239000   
-        },
-        {
-          image: slide_img4,
-          category: "Gaming",
-          name: "Stabex Gas",
-          price: 239000  
-        },
-        {
-          image: slide_img2,
-          category: "Gaming",
-          name: "Minute Maid",
-          price: 239000 
-        },
-        {
-          image: slide_img1, 
-          category: "Gaming",
-          name: "Lato Milk",
-          price: 239000      
-        },
-        {
-          image: slide_img2,
-          category: "Gaming",
-          name: "Shoes",
-          price: 239000  
-        },
-        {
-          image: slide_img3,
-          category: "Gaming",
-          name: "Sugar",
-          price: 239000  
-        },
-        {
-          image: slide_img4,
-          category: "Gaming",
-          name: "Bue Band",
-          price: 239000  
-        },
-        {
-          image: slide_img2,
-          category: "Gaming",
-          name: "Soap",
-          price: 239000  
-        },
-      ];
+  const loaderData = useLoaderData()
+  const products = loaderData.products
 
+  function renderYouMayLikeElements()
+  {
+
+    return(
+      <>
+        {products.slice(0,5).map((product)=>(
+          <Link to={`/shop/product/${product._id}`} key={product._id} className='my-4 relative inline-block rounded-lg xsm:h-36 xsm:w-30 md:h-64 md:w-44 cursor-pointer hover:scale-105 ease-in-out duration-300 hover:shadow-xl'>
+            <div className='flex justify-center'>
+              <img className='rounded-lg xsm:h-20 xsm:w-20 md:w-40 md:h-40' src={iphone}/>
+              <h1 className='absolute bg-gray-200 rounded-sm text-brightGreen top-1 right-2  font-bold xsm:text-sm md:text-md'>-23%</h1>
+            </div>                      
+            <div className='md:ml-4 ml-2 sm:mt-4'>
+              <h1 className='text-xs md:text-lg'>{product.name}</h1>
+              <h1 className=' font-bold md:text-xl text-sm'>{product.finalprice}</h1>
+              <h1 className='text-sm hidden md:block line-through'>{product.initialprice}</h1>
+            </div>
+          </Link>
+        ))}
+      </>
+    )
+  }
     // horizontal scroll slider buttons
   const slideLeft =()=>{
     var slider = document.getElementById('slider')
@@ -133,19 +107,7 @@ export default function Cart()
                 <div className='relative flex items-center bg-white rounded-b-md'>
                   <IoChevronBack className=' opacity-50 cursor-pointer hover:opacity-100' onClick={slideLeft} size={40} />
                   <div id='slider' className='w-full  space-x-4  h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide'>
-                  {imagescroll.map((image,index)=>(
-                    <Link to={`/shop/product/${index}`} key={index} className='my-4 relative inline-block rounded-lg xsm:h-36 xsm:w-30 md:h-64 md:w-44 cursor-pointer hover:scale-105 ease-in-out duration-300 hover:shadow-xl'>
-                      <div className='flex justify-center'>
-                        <img className='rounded-lg xsm:h-20 xsm:w-20 md:w-40 md:h-40' src={iphone}/>
-                        <h1 className='absolute bg-gray-200 rounded-sm text-brightGreen top-1 right-2  font-bold xsm:text-sm md:text-md'>-23%</h1>
-                      </div>                      
-                      <div className='md:ml-4 ml-2 sm:mt-4'>
-                        <h1 className='text-xs md:text-lg'>{image.name}</h1>
-                        <h1 className=' font-bold md:text-xl text-sm'>{image.price}</h1>
-                        <h1 className='text-sm hidden md:block line-through'>{image.price}</h1>
-                      </div>
-                    </Link>
-                  ))}
+                  {renderYouMayLikeElements()}
                   </div>
                   <IoChevronForward className=' opacity-50 cursor-pointer hover:opacity-100' onClick={slideRight} size={40} />
                 </div>

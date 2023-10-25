@@ -49,7 +49,8 @@ export const login = async(req,res)=>{
 
         if(!isMatch) return res.status(400).json({msg: "Invalid username or password"})
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+        const userData = { id: user._id }
+        const token = jwt.sign(userData, process.env.JWT_SECRET)
         delete user.password
 
         // After successful login, check if there are items in the cart with the user's session ID
