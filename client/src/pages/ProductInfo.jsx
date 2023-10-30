@@ -2,7 +2,7 @@ import { IoChevronForward,IoStarHalf,IoStar,IoStarOutline,IoCheckmarkDoneCircleO
 import { Link,defer,useLocation,useLoaderData, Await } from "react-router-dom";
 import { Suspense } from 'react';
 import iphone from "../imgs/Apple_Iphone_14.png" ;
-import { getProductInfo,getProducts } from "../api";
+import { getProductInfo,getProducts,addCart } from "../api";
 
 
 function shuffleArray(array) {
@@ -40,6 +40,16 @@ export default function ProductInfo()
     slider.scrollLeft = slider.scrollLeft + 500
   }
 
+  const addToCart = async(id)=>{
+    try {
+      await addCart(id);
+      alert("item added to Cart")
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
+
   function renderYouMayLikeElements()
   {
     const YouMayLike = products.filter(product => product.category === loaderData.product.category).slice(0, 3);
@@ -54,8 +64,8 @@ export default function ProductInfo()
             </div>                      
             <div className='md:ml-4 ml-2 sm:mt-4'>
               <h1 className='text-xs md:text-lg'>{product.name}</h1>
-              <h1 className=' font-bold md:text-xl text-sm'>{product.finalprice}</h1>
-              <h1 className='text-sm hidden md:block line-through'>{product.initialprice}</h1>
+              <h1 className=' font-bold md:text-xl text-sm'>{product.finalprice.toLocaleString()}</h1>
+              <h1 className='text-sm hidden md:block line-through'>{product.initialprice.toLocaleString()}</h1>
             </div>
           </Link>
         ))}
@@ -83,12 +93,13 @@ export default function ProductInfo()
             <div className="space-y-4">
                 <h1 className="sm:text-2xl text-lg">{product.name}</h1>
                 <div className="flex space-x-4 items-center">
-                    <h1 className="font-bold sm:text-2xl text-sm">{product.finalprice} UGX</h1>
-                    <h1 className="line-through sm:text-lg text-xs">{product.initialprice} UGX</h1>
+                    <h1 className="font-bold sm:text-2xl text-sm">{product.finalprice.toLocaleString()} UGX</h1>
+                    <h1 className="line-through sm:text-lg text-xs">{product.initialprice.toLocaleString()} UGX</h1>
                     <h1 className="text-brightGreen bg-veryLightGray rounded-sm sm:text-xl text-sm">-{product.discount}%</h1>
                 </div>
                 <button
                 to="login"
+                onClick={()=> addToCart(product._id)}
                 className="block p-3 px-6 md:w-96 w-full md:mt-4 text-white font-bold bg-brightGreen rounded-lg baseline hover:bg-brightGreenLight"
                 >
                 Add to Cart

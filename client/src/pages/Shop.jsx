@@ -1,7 +1,9 @@
 import { Suspense } from "react";
-import { getProducts } from "../api";
+import { getProducts,addCart } from "../api";
 import { Await, Form, Link, defer, useLoaderData,useSearchParams } from "react-router-dom";
 import { useState } from "react";
+import Slider from 'react-slider';
+
 export function loader()
 {
   let loadedproducts = getProducts()
@@ -16,17 +18,18 @@ export default function Shop()
 
   // Initialize the current page state
   const [currentPage, setCurrentPage] = useState(1);
-
-  // const min = 1000;
-  // const max = 4000;
+  
+   const [min, max] = [0, 3000000]; 
+   const [values, setValues] = useState([min, max]);
 
   const handleFilterSubmit = (event) => {
-    try {
-
+    event.preventDefault();
+    try {      
         const category = event.target.category.value 
         const discount = event.target.discount.value
-        //const maxPrice = values[0]
-        //const minPrice = values[1]
+        const minprice = values[0]
+        const maxprice = values[1]
+        
 
       setIsFiltering(true);
       // Build the query parameters based on the selected options
@@ -38,12 +41,12 @@ export default function Shop()
       if (discount) {
         queryParameters.discount = discount.toString();
       }
-      // if (maxPrice) {
-      //   queryParameters.maxPrice = maxPrice.toString();
-      // }
-      // if (minPrice) {
-      //   queryParameters.minPrice = minPrice.toString();
-      // }
+      if (minprice) {
+        queryParameters.minPrice = minprice.toString();
+      }
+      if (maxprice) {
+        queryParameters.maxPrice = maxprice.toString();
+      }
 
       // Update the search parameters in the URL
       setSearchParams(queryParameters);
@@ -63,10 +66,10 @@ export default function Shop()
 
   const filterProducts = (products) =>{
     return products.filter((product) => {
-      const categoryParam = searchParams.get('category') || ""
-      const discountParam = parseInt(searchParams.get('discount'), 10) || ""
-      const minPriceParam = parseInt(searchParams.get('minPrice'), 10) || "";
-      const maxPriceParam = parseInt(searchParams.get('maxPrice'), 10) || "";
+      const categoryParam = searchParams.get('category')
+      const discountParam = parseInt(searchParams.get('discount'), 10)
+      const minPriceParam = parseInt(searchParams.get('minPrice'), 10);
+      const maxPriceParam = parseInt(searchParams.get('maxPrice'), 10);
 
       if (categoryParam && product.category !== categoryParam) {
         return false;
@@ -74,10 +77,10 @@ export default function Shop()
       if (discountParam && product.discount < discountParam) {
         return false;
       }
-      if (maxPriceParam && product.finalprice > maxPriceParam) {
+      if (maxPriceParam && product.finalprice >= maxPriceParam) {
         return false;
       }
-      if (minPriceParam && product.finalprice < minPriceParam) {
+      if (minPriceParam && product.finalprice <= minPriceParam) {
         return false;
       }
       return true;
@@ -89,9 +92,15 @@ export default function Shop()
     // Define the number of safaris to display per page
     const productsPerPage = 3; 
 
-    // If there are no filtered products, display all safaris
-    const filteredProducts = filterProducts(products).length === 0 ? products : filterProducts(products);
+    if (filterProducts(products).length === 0) {
+      // Display a message indicating no matching products
+      return <p>No products match the selected filters.</p>;
+    }
 
+    // If there are no filtered products, display all products
+    const filteredProducts = filterProducts(products) ? filterProducts(products) : products;
+
+    
     // Calculate the start and end indexes of the current page's products
     const startIndex = (currentPage - 1) * productsPerPage;
     const endIndex = startIndex + productsPerPage;
@@ -107,35 +116,49 @@ export default function Shop()
       setCurrentPage(pageNumber);  
     };
 
+    const addToCart = async(id)=>{
+      try {
+        await addCart(id);
+        alert("item added to Cart")
+      } catch (error) {
+        console.log(error)
+      }
+      
+    }
+
     return(
     <>
       {/* Products section */}          
       <div className="relative grid lg:grid-cols-4 md:grid-cols-3 xsm:grid-cols-2 items-center bg-white rounded-b-md sm:mx-8 lg:mx-20 space-x-4 ">
         {currentProducts.map((product) => (
-          <Link
+          <div
             key={product._id}
-            to={`product/${product._id}`}
-            state={{search: `?${searchParams.toString()}`,cat: searchParams.get('category')}}
             className="my-4 relative inline-block rounded-lg cursor-pointer hover:scale-105 ease-in-out duration-300 hover:shadow-xl "
           >
-            <div className="flex justify-center">
-              <img
-                className="rounded-lg w-40 h-40 md:w-60 md:h-60"
-                src={product.image}
-              />
-              <h1 className="absolute bg-gray-200 rounded-sm text-brightGreen top-1 right-2 font-bold text-md sm:text-sm md:text-md">-{product.discount}%</h1>
-            </div>
-            <div className="ml-2 mt-4">
-              <h1 className="text-lg md:text-lg">{product.name}</h1>
-              <h1 className="font-bold text-lg md:text-xl">{product.finalprice} UGX</h1>
-              <h1 className="text-sm line-through">{product.initialprice} UGX</h1>
-            </div>
+            <Link
+            to={`product/${product._id}`}
+            state={{search: `?${searchParams.toString()}`,cat: searchParams.get('category')}}
+            >
+              <div className="flex justify-center">
+                <img
+                  className="rounded-lg w-40 h-40 md:w-60 md:h-60"
+                  src={product.image}
+                />
+                <h1 className="absolute bg-gray-200 rounded-sm text-brightGreen top-1 right-2 font-bold text-md sm:text-sm md:text-md">-{product.discount}%</h1>
+              </div>
+              <div className="ml-2 mt-4">
+                <h1 className="text-lg md:text-lg">{product.name}</h1>
+                <h1 className="font-bold text-lg md:text-xl">{product.finalprice.toLocaleString()} UGX</h1>
+                <h1 className="text-sm line-through">{product.initialprice.toLocaleString()} UGX</h1>
+              </div>
+            </Link>            
             <button
+              onClick={()=> addToCart(product._id)}
               className="block p-3 px-6 w-full md:mt-4 text-white font-bold bg-brightGreen rounded-lg baseline hover:bg-brightGreenLight"
             >
               Add to Cart
             </button>
-          </Link>
+          </div>
         ))}
       </div>
 
@@ -192,14 +215,10 @@ export default function Shop()
              <option value="0">0% or more</option>
            </select>
 
-              <select name="category" className="shadow-xl w-40 lg:w-48 rounded-md m-2">
-                <option value="">Select Discount %</option>
-                <option value="Gaming">80% or more</option>
-                <option value="Supermarket">60% or more</option>
-                <option value="Phones">40% or more</option>
-                <option value="Clothes">20% or more</option>
-                <option value="Clothes">0% or more</option>
-              </select>
+              <div className="shadow-xl w-40 lg:w-48 rounded-md m-2">
+              <span className={'value'}>UGX{values[0].toLocaleString()} - UGX{values[1].toLocaleString()}</span>
+                <Slider className='slider w-auto h-0.5 bg-blue-100 mt-4' onChange={setValues} value={values} min={min} max={max} />
+              </div>
 
               <button
                   disabled={isFiltering}

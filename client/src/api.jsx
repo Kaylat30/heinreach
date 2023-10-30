@@ -114,3 +114,108 @@ export async function registerUser(firstname,lastname,email,password)
         
       }
 }
+
+export async function addCart(id)
+{
+
+    try {
+    const res = await fetch("http://localhost:3000/addToCart", {
+        method: "POST",
+        headers: {
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId: id }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw {
+            message: data.error,
+            statusText: res.statusText,
+            status: res.status
+        }
+    }
+
+
+    return data;
+
+    } catch (error) {
+    console.error("Error: " + error.message);
+    
+    }
+}
+export async function deleteCart(id)
+{
+
+    try {
+    const res = await fetch("http://localhost:3000/deleteCart", {
+        method: "POST",
+        headers: {
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cartItemId: id }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw {
+            message: data.error,
+            statusText: res.statusText,
+            status: res.status
+        }
+    }
+
+
+    return data;
+
+    } catch (error) {
+    console.error("Error: " + error.message);
+    
+    }
+}
+
+export async function getCart()
+{
+    const res = await fetch("http://localhost:3000/cart")
+    const data = await res.json()
+
+    if (!res.ok) {
+        throw {
+            message: data.error,
+            statusText: res.statusText,
+            status: res.status
+        }
+    }
+
+    return data
+ 
+}
+
+export async function updateCartAmount(newAmount, id) {
+    try {
+        const res = await fetch("http://localhost:3000/updateCartAmount", {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ productId: id,newAmount:newAmount }),
+    })
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw {
+            message: data.error,
+            statusText: res.statusText,
+            status: res.status
+        }
+    }
+
+    return data
+    } catch (error) {
+        console.log(error)
+    }
+    
+}

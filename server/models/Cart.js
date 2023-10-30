@@ -7,6 +7,7 @@ const CartSchema = new mongoose.Schema(
         quantity: Number,
         amount:Number,
         finalprice: Number,
+        initialprice:Number,
         discount: Number,
         user: {
             type: mongoose.Schema.Types.ObjectId,

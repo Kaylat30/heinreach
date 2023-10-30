@@ -41,6 +41,7 @@ export const addToCart = async (req, res) => {
                 quantity: product.quantity,
                 amount: 1,
                 finalprice: product.finalprice,
+                initialprice:product.initialprice,
                 discount: product.discount,
                 product: productId,
                 user: req.user !== undefined ? req.user._id : null,
@@ -81,44 +82,61 @@ export const getCart = async (req, res) => {
     }
 };
 
-//update Cart items
-// export const updateCart = async (req, res) => {
-//     try {
-//       const { productId } = req.body;
-//       const sessionID = req.sessionID;
+//delete from Cart
+export const deleteCart = async (req, res) => {
+    try {
+      const { cartItemId } = req.body;
   
-//       if (!productId) {
-//         return res.status(400).json({ error: 'productId is required' });
-//       }
+      const deletedCartItem = await Cart.findByIdAndDelete(cartItemId);
   
-//       let product = await Product.findById(productId);
+      if (!deletedCartItem) {
+        return res.status(404).json({
+          success: false,
+          message: 'Cart item not found',
+        });
+      }
   
-//       if (!product) {
-//         return res.status(404).json({ error: 'Product not found' });
-//       }
+      return res.status(200).json({
+        success: true,
+        message: 'Cart item deleted successfully',
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: error.message,
+      });
+    }
+  };
+
+  export const updateCartAmount = async (req, res) => {
+    try {
+      const { productId,newAmount } = req.body; 
+
+      // Find the product by its ID and update the amount field
+      const updatedProduct = await Cart.findByIdAndUpdate(
+        productId,
+        { amount: newAmount },
+        { new: true } // Return the updated product
+      );
   
-//       const cartQuery = req.user
-//         ? { product: productId, user: req.user.id }
-//         : { product: productId, session: sessionID };
+      if (!updatedProduct) {
+        return res.status(404).json({
+          success: false,
+          message: 'Product not found',
+        });
+      }
   
-//       let cartItem = await Cart.findOne(cartQuery);
-  
-//       if (cartItem) {
-//         // Increment the quantity if the item already exists in the cart
-//         cartItem.amount += 1;
-  
-//         // Update the final price based on the updated quantity
-//         cartItem.finalprice = cartItem.amount * product.finalprice;
-  
-//         const savedCart = await cartItem.save();
-//         return res.status(200).json(savedCart);
-//       } else {
-//         return res.status(404).json({ error: 'Cart item not found' });
-//       }
-//     } catch (error) {
-//       res.status(500).json({ error: error.message });
-//     }
-//   };
+      return res.status(200).json({
+        success: true,
+        product: updatedProduct,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: error.message,
+      });
+    }
+  };
   
   
 

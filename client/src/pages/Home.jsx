@@ -233,8 +233,8 @@ export default function Home() {
              </div>                      
              <div className='md:ml-4 ml-2 sm:mt-4'>
                <h1 className='text-xs md:text-lg'>{product.name}</h1>
-               <h1 className=' font-bold md:text-xl text-sm'>{product.finalprice}</h1>
-               <h1 className='text-sm hidden md:block line-through'>{product.initialprice}</h1>
+               <h1 className=' font-bold md:text-xl text-sm'>{product.finalprice.toLocaleString()}</h1>
+               <h1 className='text-sm hidden md:block line-through'>{product.initialprice.toLocaleString()}</h1>
              </div>
             </Link>
           ))}
@@ -252,8 +252,8 @@ export default function Home() {
              </div>                      
              <div className='md:ml-4 ml-2 sm:mt-4'>
                <h1 className='text-xs md:text-lg'>{product.name}</h1>
-               <h1 className=' font-bold md:text-xl text-sm'>{product.finalprice}</h1>
-               <h1 className='text-sm hidden md:block line-through'>{product.initialprice}</h1>
+               <h1 className=' font-bold md:text-xl text-sm'>{product.finalprice.toLocaleString()}</h1>
+               <h1 className='text-sm hidden md:block line-through'>{product.initialprice.toLocaleString()}</h1>
              </div>
            </Link>
          ))}
@@ -273,8 +273,8 @@ export default function Home() {
             <div className='absolute flex flex-wrap-reverse justify-center items-center lg:top-14 lg:left-10 md:top-16 md:left-12 sm:top-12 top-14 left-4'>
               <div>
                 <h1 className='md:text-lg text-sm text-white'>{product.name}</h1>
-                <h1 className=' font-bold sm:text-xl text-xs text-white'>{product.finalprice}UGX</h1>
-                <h1 className='text-xs line-through text-white'>{product.initialprice}</h1>
+                <h1 className=' font-bold sm:text-xl text-xs text-white'>{product.finalprice.toLocaleString()}UGX</h1>
+                <h1 className='text-xs line-through text-white'>{product.initialprice.toLocaleString()}</h1>
               </div>
               <div>
                 <img className='sm:h-16 sm:w-16 md:h-24 md:w-24 lg:h-36 lg:w-36 h-10 w-10' src={iphone} />
