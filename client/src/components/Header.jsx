@@ -1,13 +1,35 @@
 import { useState,useEffect, } from 'react';
-import { Link, NavLink ,useLocation, Form} from 'react-router-dom';
+import { Link, NavLink ,useLocation, Form, useNavigate} from 'react-router-dom';
 import image from '../imgs/logo.png';
 import {IoSearch,IoCart,IoPersonCircleOutline } from "react-icons/io5";
-
-
+import { getCart,getProducts } from '../api';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [count, setCount] = useState(0);
+  const [cartItems, setCartItems] = useState([]);
   const location = useLocation();
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+ 
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const cartData = await getCart();
+        setCartItems(cartData);
+        cartData.length == undefined ? setCount(0) : setCount(cartData.length)
+      } catch (error) {
+        console.error('Error fetching cart items:', error);
+      }
+    };
+
+    fetchCart(); 
+
+    
+  }, [cartItems]);
+
+
   const activeStyles = {
     fontWeight: "bold",
     textDecoration: "underline",
@@ -34,6 +56,22 @@ export default function Header() {
     setMenuOpen(false);
   };
 
+  const handleSearch = (event) => {
+    event.preventDefault();
+
+    let products = getProducts()
+    // Filter products based on the searchQuery (replace with your filtering logic)
+    const filteredProducts = products.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    // You can navigate to the search results page with the query parameter
+    navigate(`/search?query=${searchQuery}`);
+
+    // Handle filtered products as needed
+    console.log('Filtered Products:', filteredProducts);
+  };
+
   return (
     <nav className="flex flex-col justify-center mx-auto px-4 pb-4 fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
       <div className='flex items-center justify-between'>
@@ -44,8 +82,14 @@ export default function Header() {
 
           {/* search section  */}
           <div className='hidden sm:flex  '>
-            <Form className='flex'>
-              <input name='search' className='flex border shadow-inner sm:w-32 md:w-72 rounded-md pl-2' placeholder='Search products and categories' />
+            <Form className='flex' onSubmit={handleSearch}>
+              <input 
+              name='search' 
+              className='flex border shadow-inner sm:w-32 md:w-72 rounded-md pl-2' 
+              placeholder='Search products and categories' 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}  
+              />
               <button type='submit' className="block p-1.5 text-2xl text-white bg-brightGreen rounded-full baseline hover:bg-brightGreenLight"><IoSearch/></button>
             </Form>
           </div>
@@ -94,7 +138,7 @@ export default function Header() {
                 >
                   <IoCart />                  
                     <span className="absolute flex justify-center -top-1 -right-1 bg-brightGreen text-xs text-white  h-4 w-4 rounded-full">
-                      0
+                      {count}
                     </span>
                   
                 </NavLink>
@@ -157,13 +201,7 @@ export default function Header() {
           <Link to="about">About Us</Link>
           <Link to="help">Help</Link>
           <Link to="contact">Contact Us</Link>        
-          <Link
-            to="login"
-            className="block p-3 px-6 pt-2 text-white bg-brightGreen rounded-full baseline hover:bg-brightGreenLight"
-          >
-            Login
-          </Link>
-        
+                  
         </div>
     </nav>
   );

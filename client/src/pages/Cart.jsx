@@ -1,7 +1,8 @@
 import { IoChevronForward,IoChevronBack, IoTrashBin, IoAlertCircleOutline } from "react-icons/io5";
 import { Link,defer,useLoaderData } from "react-router-dom";
-import { getProducts } from "../api";
+import { getCart, getProducts,deleteCart,updateCartAmount } from "../api";
 import iphone from "../imgs/Apple_Iphone_14.png" ;
+import { useState,useEffect } from "react";
 
 function shuffleArray(array) {
   
@@ -15,13 +16,32 @@ function shuffleArray(array) {
 
 export async function loader() {
   const loadedProducts = await getProducts();
+  const loadedCart = await getCart()
   const shuffledProducts = shuffleArray(loadedProducts);
-  return defer({ products: shuffledProducts });
+  return defer({ products: shuffledProducts, cartItems: loadedCart });
 }
 export default function Cart()
 {
   const loaderData = useLoaderData()
   const products = loaderData.products
+  const [cartItems, setCartItems] = useState(loaderData.cartItems);
+
+  useEffect(() => {
+    setCartItems(loaderData.cartItems);
+  }, [loaderData.cartItems]);
+
+  let count = cartItems.length == undefined ? 0 : cartItems.length
+
+  const deleteCartItem = async(id)=>{
+    try {
+      await deleteCart(id);
+      setCartItems(cartItems.filter((item) => item._id !== id));
+      alert("item deleted successfully")
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
 
   function renderYouMayLikeElements()
   {
@@ -36,10 +56,82 @@ export default function Cart()
             </div>                      
             <div className='md:ml-4 ml-2 sm:mt-4'>
               <h1 className='text-xs md:text-lg'>{product.name}</h1>
-              <h1 className=' font-bold md:text-xl text-sm'>{product.finalprice}</h1>
-              <h1 className='text-sm hidden md:block line-through'>{product.initialprice}</h1>
+              <h1 className=' font-bold md:text-xl text-sm'>{product.finalprice.toLocaleString()}</h1>
+              <h1 className='text-sm hidden md:block line-through'>{product.initialprice.toLocaleString()}</h1>
             </div>
           </Link>
+        ))}
+      </>
+    )
+  }
+
+  const handleAmountChange = async(change,product) => {
+    const newAmount = product.amount + change;
+    if (newAmount >= 1) {
+      const updatedItems = cartItems.map((item) => {
+        if (item._id === product._id) {
+          return { ...item, amount: newAmount };
+        }
+        return item;
+      });
+      setCartItems(updatedItems);
+      await updateCartAmount(newAmount, product._id); 
+      alert("updated successfully")
+    }
+  };
+  
+  // Calculate the subtotal
+  const calculateSubtotal = () => {
+    if (Array.isArray(cartItems) && cartItems.length > 0) {
+      let subtotal = 0;
+      cartItems.forEach((product) => {
+        subtotal += product.finalprice * product.amount;
+      });
+      return subtotal.toLocaleString();
+    } else {
+      return "0"; 
+    }
+  };
+  
+
+  const renderCartItems = ()=>{
+    if (!Array.isArray(cartItems) || cartItems.length === 0) {
+      return <div>No items in the cart</div>;
+    }
+    
+    return(
+      <>
+        {cartItems.map((product)=>(
+          <div key={product._id} className="p-4 border border-l-0 border-r-0 border-t-0">                           
+              <div className="flex justify-between flex-wrap ">                            
+                  <div className="flex ">
+                      <img className="w-20 h-20" src={iphone} />
+                      <div>
+                      <h1 >{product.name}</h1>
+                      <h1 className="text-red-600 text-xs flex items-center space-x-1"><IoAlertCircleOutline/><span>{product.quantity} units left</span></h1>
+                      </div>
+                  </div>
+                  <div>
+                      <h1 className="font-bold sm:text-xl text-sm">{product.finalprice.toLocaleString()} UGX</h1>
+                      <div className="flex">
+                          <h1 className="line-through sm:text-sm text-xs">{product.initialprice.toLocaleString()} UGX</h1>
+                          <h1 className="text-brightGreen bg-veryLightGray rounded-sm sm:text-sm text-sm">-{product.discount}%</h1>
+                      </div>
+                  </div>
+              </div>            
+              <div>
+                  <div className="flex justify-between">
+                      <button
+                        onClick={()=> deleteCartItem(product._id)}
+                       className="flex items-center cursor-pointer text-brightGreen space-x-2"><IoTrashBin/> <span>REMOVE</span></button>
+                      <div className="space-x-4">
+                          <button onClick={() => handleAmountChange(-1,product)} className="bg-brightGreen text-white font-bold w-6 sm:w-10 sm:h-10 rounded-md sm:text-3xl">-</button>
+                          <label className="sm:text-3xl text-lg">{product.amount}</label>
+                          <button onClick={() => handleAmountChange(1,product)} className="bg-brightGreen text-white font-bold w-6 sm:w-10 sm:h-10 rounded-md sm:text-3xl">+</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
         ))}
       </>
     )
@@ -58,44 +150,16 @@ export default function Cart()
             {/* Cart section */}
             <section className="bg-white rounded-lg xsm:mx-6 lg:mx-20">
                 <div className='h-12 items-center md:text-2xl rounded-t-md text-black  flex justify-between px-1 sm:px-4 border border-l-0 border-r-0 border-t-0'>
-                  <div className='font-bold'>Cart (2)</div>
-                  <div className='md:text-lg'>Subtotal: <span className="font-bold md:text-2xl">UGX 2300000</span></div>
+                  <div className='font-bold'>Cart ({count})</div>
+                  <div className='md:text-lg'>Subtotal: <span className="font-bold md:text-2xl">UGX {calculateSubtotal()}</span></div>
                 </div>
-                <div className="">
-                    <div className="p-4 border border-l-0 border-r-0 border-t-0">                           
-                        <div className="flex justify-between flex-wrap ">                            
-                            <div className="flex ">
-                                <img className="w-20 h-20" src={iphone} />
-                                <div>
-                                <h1 >Apple Iphone 14</h1>
-                                <h1 className="text-red-600 text-xs flex items-center space-x-1"><IoAlertCircleOutline/><span>Few units left</span></h1>
-                                </div>
-                            </div>
-                            <div>
-                                <h1 className="font-bold sm:text-xl text-sm">2300000 UGX</h1>
-                                <div className="flex">
-                                    <h1 className="line-through sm:text-sm text-xs">2300000 UGX</h1>
-                                    <h1 className="text-brightGreen bg-veryLightGray rounded-sm sm:text-sm text-sm">-23%</h1>
-                                </div>
-                            </div>
-                        </div>            
-                        <div>
-                            <div className="flex justify-between">
-                                <div className="flex items-center cursor-pointer text-brightGreen space-x-2"><IoTrashBin/> <span>REMOVE</span></div>
-                                <div className="space-x-4">
-                                    <button className="bg-brightGreen text-white font-bold w-6 sm:w-10 sm:h-10 rounded-md sm:text-3xl">-</button>
-                                    <label className="sm:text-3xl text-lg">0</label>
-                                    <button className="bg-brightGreen text-white font-bold w-6 sm:w-10 sm:h-10 rounded-md sm:text-3xl">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
+                <div>
+                    {renderCartItems()}
                 </div>
                 <button
                   className="block p-3 px-6 w-full md:mt-4 text-white font-bold bg-brightGreen rounded-lg baseline hover:bg-brightGreenLight"
                 >
-                  CHECKOUT (UGX 2300000)
+                  CHECKOUT (UGX {calculateSubtotal()})
                 </button>
             </section>
 

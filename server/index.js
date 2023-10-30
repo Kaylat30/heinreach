@@ -6,14 +6,14 @@ import path from "path"
 import dotenv from "dotenv";
 import { login,register,logout } from "./routes/auth.js"
 import {addProducts,getProducts,getProductInfo} from "./routes/product.js"
-import {getCart,addToCart} from "./routes/cart.js"
+import {getCart,addToCart,deleteCart,updateCartAmount} from "./routes/cart.js"
 
 // Configurations
 const  app = express()
 app.use(express.json())
 app.use(cors({
     origin: "http://localhost:5173",
-    methods: ['GET','POST','PACTH','DELETE','PUT'],
+    methods: ['GET','POST','PATCH','DELETE','PUT'],
     allowedHeaders: ['Content-Type'],
 }))
 dotenv.config(); // Load environment variables from .env file
@@ -48,6 +48,8 @@ app.use("/shop",getProducts)
 app.use("/product/:id",getProductInfo)
 app.use("/addToCart",addToCart)
 app.use("/cart",getCart)
+app.use("/deleteCart",deleteCart)
+app.use("/updateCartAmount",updateCartAmount)
 
 //app.use("/users", userRoute)
 
