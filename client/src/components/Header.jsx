@@ -1,15 +1,15 @@
 import { useState,useEffect, } from 'react';
-import { Link, NavLink ,useLocation, Form, useNavigate} from 'react-router-dom';
+import { Link, NavLink ,useLocation, Form,useSearchParams, useNavigate } from 'react-router-dom';
 import image from '../imgs/logo.png';
 import {IoSearch,IoCart,IoPersonCircleOutline } from "react-icons/io5";
-import { getCart,getProducts } from '../api';
+import { getCart } from '../api';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [count, setCount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
-  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
  
@@ -56,20 +56,15 @@ export default function Header() {
     setMenuOpen(false);
   };
 
-  const handleSearch = (event) => {
+  const handleSearch = async (event) => {
     event.preventDefault();
-
-    let products = getProducts()
-    // Filter products based on the searchQuery (replace with your filtering logic)
-    const filteredProducts = products.filter((product) =>
-      product.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
+  
+    let searchQuery = event.target.search.value;  
+  
+    setSearchParams({ search: searchQuery });
+  
     // You can navigate to the search results page with the query parameter
-    navigate(`/search?query=${searchQuery}`);
-
-    // Handle filtered products as needed
-    console.log('Filtered Products:', filteredProducts);
+    navigate(`/shop?search=${searchQuery}`);
   };
 
   return (
@@ -87,8 +82,8 @@ export default function Header() {
               name='search' 
               className='flex border shadow-inner sm:w-32 md:w-72 rounded-md pl-2' 
               placeholder='Search products and categories' 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}  
+              //value={searchQuery}
+              //onChange={(e) => setSearchQuery(e.target.value)}  
               />
               <button type='submit' className="block p-1.5 text-2xl text-white bg-brightGreen rounded-full baseline hover:bg-brightGreenLight"><IoSearch/></button>
             </Form>
@@ -168,8 +163,14 @@ export default function Header() {
 
       {/* search section mobile  */}
       <div className='flex justify-center sm:hidden'>
-            <Form className='flex'>
-              <input name='search' className='flex border shadow-inner w-80 sm:w-96 rounded-md pl-1' placeholder='Search products and categories' />
+            <Form className='flex'onSubmit={handleSearch}>
+              <input 
+              name='search' 
+              className='flex border shadow-inner w-80 sm:w-96 rounded-md pl-1' 
+              placeholder='Search products and categories'
+              //value={searchQuery} 
+              //onChange={(e) => setSearchQuery(e.target.value)}  
+              />
               <button type='submit' className="block p-1 text-2xl text-white bg-brightGreen rounded-full baseline hover:bg-brightGreenLight"><IoSearch/></button>
             </Form>
       </div>

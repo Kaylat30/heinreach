@@ -3,6 +3,7 @@ import { Link,defer,useLoaderData } from "react-router-dom";
 import { getCart, getProducts,deleteCart,updateCartAmount } from "../api";
 import iphone from "../imgs/Apple_Iphone_14.png" ;
 import { useState,useEffect } from "react";
+import { toast } from "react-toastify";
 
 function shuffleArray(array) {
   
@@ -32,11 +33,13 @@ export default function Cart()
 
   let count = cartItems.length == undefined ? 0 : cartItems.length
 
-  const deleteCartItem = async(id)=>{
+  const deleteCartItem = async(product)=>{
     try {
-      await deleteCart(id);
-      setCartItems(cartItems.filter((item) => item._id !== id));
-      alert("item deleted successfully")
+      await deleteCart(product._id);
+      setCartItems(cartItems.filter((item) => item._id !== product._id));
+      toast.success(`${product.name} removed successfully`,{
+        position: "bottom-left"
+      })
     } catch (error) {
       console.log(error)
     }
@@ -76,7 +79,9 @@ export default function Cart()
       });
       setCartItems(updatedItems);
       await updateCartAmount(newAmount, product._id); 
-      alert("updated successfully")
+      toast.success(`${product.name} amount updated successfully`,{
+        position: "bottom-left"
+      })
     }
   };
   
@@ -122,7 +127,7 @@ export default function Cart()
               <div>
                   <div className="flex justify-between">
                       <button
-                        onClick={()=> deleteCartItem(product._id)}
+                        onClick={()=> deleteCartItem(product)}
                        className="flex items-center cursor-pointer text-brightGreen space-x-2"><IoTrashBin/> <span>REMOVE</span></button>
                       <div className="space-x-4">
                           <button onClick={() => handleAmountChange(-1,product)} className="bg-brightGreen text-white font-bold w-6 sm:w-10 sm:h-10 rounded-md sm:text-3xl">-</button>
