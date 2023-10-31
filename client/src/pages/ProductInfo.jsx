@@ -2,8 +2,8 @@ import { IoChevronForward,IoStarHalf,IoStar,IoStarOutline,IoCheckmarkDoneCircleO
 import { Link,defer,useLocation,useLoaderData, Await } from "react-router-dom";
 import { Suspense } from 'react';
 import iphone from "../imgs/Apple_Iphone_14.png" ;
-import { getProductInfo,getProducts,addCart } from "../api";
-
+import { getProductInfo,getProducts,addCart,getCart,updateCartAmount} from "../api";
+import { toast } from "react-toastify";
 
 function shuffleArray(array) {
   
@@ -40,15 +40,46 @@ export default function ProductInfo()
     slider.scrollLeft = slider.scrollLeft + 500
   }
 
-  const addToCart = async(id)=>{
-    try {
-      await addCart(id);
-      alert("item added to Cart")
-    } catch (error) {
-      console.log(error)
+  const handleAmountChange = async(change,product) => {
+    const newAmount = product.amount + change;
+    if (newAmount >= 1) {
+      await updateCartAmount(newAmount, product._id); 
+      toast.success(`${product.name} amount updated successfully`,{
+        position: "bottom-left"
+      })
     }
-    
-  }
+  };
+  
+  const addToCart = async (product) => {
+    try {
+
+      // Check if the product already exists in the cart
+      const cartItems = await getCart()
+
+      if (Array.isArray(cartItems) && cartItems.length > 0) {
+        const existingProduct = cartItems.find((item) => item.product === product._id);
+  
+        if (existingProduct) {
+          handleAmountChange(1, existingProduct);
+        } else {
+          await addCart(product._id);
+          toast.success(`${product.name} added to the cart successfully`, {
+            position: "bottom-left"
+          });
+        }
+      } else {
+
+        await addCart(product._id);
+        toast.success(`${product.name} added to cart successfully`,{
+          position: "bottom-left"
+        })
+
+      }
+  
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   function renderYouMayLikeElements()
   {
@@ -99,7 +130,7 @@ export default function ProductInfo()
                 </div>
                 <button
                 to="login"
-                onClick={()=> addToCart(product._id)}
+                onClick={()=> addToCart(product)}
                 className="block p-3 px-6 md:w-96 w-full md:mt-4 text-white font-bold bg-brightGreen rounded-lg baseline hover:bg-brightGreenLight"
                 >
                 Add to Cart

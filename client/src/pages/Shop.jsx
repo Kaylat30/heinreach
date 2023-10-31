@@ -1,8 +1,9 @@
 import { Suspense } from "react";
-import { getProducts,addCart } from "../api";
+import { getProducts,addCart,getCart,updateCartAmount } from "../api";
 import { Await, Form, Link, defer, useLoaderData,useSearchParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, } from "react";
 import Slider from 'react-slider';
+import { toast } from "react-toastify";
 
 export function loader()
 {
@@ -29,12 +30,16 @@ export default function Shop()
         const discount = event.target.discount.value
         const minprice = values[0]
         const maxprice = values[1]
-        
+        const searchQuery = searchParams.get('search')
 
       setIsFiltering(true);
       // Build the query parameters based on the selected options
       const queryParameters = {};
 
+
+      if (searchQuery) {
+        queryParameters.search = searchQuery;
+      }
       if (category) {
         queryParameters.category = category;
       }
@@ -44,7 +49,7 @@ export default function Shop()
       if (minprice) {
         queryParameters.minPrice = minprice.toString();
       }
-      if (maxprice) {
+      if (maxprice !== max) {
         queryParameters.maxPrice = maxprice.toString();
       }
 
@@ -59,9 +64,45 @@ export default function Shop()
     
   };
 
-  const clearFilters = () => {
-    // Clear the search parameters in the URL
-    setSearchParams({});
+  const handleAmountChange = async(change,product) => {
+    const newAmount = product.amount + change;
+    if (newAmount >= 1) {
+      await updateCartAmount(newAmount, product._id); 
+      toast.success(`${product.name} amount updated successfully`,{
+        position: "bottom-left"
+      })
+    }
+  };
+  
+  const addToCart = async (product) => {
+    try {
+
+      // Check if the product already exists in the cart
+      const cartItems = await getCart()
+
+      if (Array.isArray(cartItems) && cartItems.length > 0) {
+        const existingProduct = cartItems.find((item) => item.product === product._id);
+  
+        if (existingProduct) {
+          handleAmountChange(1, existingProduct);
+        } else {
+          await addCart(product._id);
+          toast.success(`${product.name} added to the cart successfully`, {
+            position: "bottom-left"
+          });
+        }
+      } else {
+
+        await addCart(product._id);
+        toast.success(`${product.name} added to cart successfully`,{
+          position: "bottom-left"
+        })
+
+      }
+  
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const filterProducts = (products) =>{
@@ -70,7 +111,11 @@ export default function Shop()
       const discountParam = parseInt(searchParams.get('discount'), 10)
       const minPriceParam = parseInt(searchParams.get('minPrice'), 10);
       const maxPriceParam = parseInt(searchParams.get('maxPrice'), 10);
+      const searchQueryParams = searchParams.get('search')
 
+      if (searchQueryParams && !product.name.toLowerCase().includes(searchQueryParams.toLowerCase())) {
+        return false;
+      }
       if (categoryParam && product.category !== categoryParam) {
         return false;
       }
@@ -116,15 +161,7 @@ export default function Shop()
       setCurrentPage(pageNumber);  
     };
 
-    const addToCart = async(id)=>{
-      try {
-        await addCart(id);
-        alert("item added to Cart")
-      } catch (error) {
-        console.log(error)
-      }
-      
-    }
+    
 
     return(
     <>
@@ -153,7 +190,7 @@ export default function Shop()
               </div>
             </Link>            
             <button
-              onClick={()=> addToCart(product._id)}
+              onClick={()=> addToCart(product)}
               className="block p-3 px-6 w-full md:mt-4 text-white font-bold bg-brightGreen rounded-lg baseline hover:bg-brightGreenLight"
             >
               Add to Cart
@@ -228,14 +265,6 @@ export default function Shop()
               </button>
               
             </Form>
-            {searchParams !== null && Object.keys(searchParams).length > 0 && (
-              <button
-                className="block p-3 px-6 w-28 sm:w-52 m-2 text-white font-bold bg-gray-500 rounded-lg baseline hover:bg-gray-600"
-                onClick={clearFilters}
-              >
-                Clear Filters
-              </button>
-              )}
           </div>
 
           <Suspense fallback={<h1>Loading Products...</h1>}>

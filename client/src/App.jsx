@@ -10,9 +10,12 @@ import Cart, {loader as cartLoader} from "./pages/Cart"
 import ProductInfo,{loader as productInfoLoader} from "./pages/ProductInfo"
 import Login, {loader as loginLoader, action as loginAction} from "./pages/Login"
 import Signup, {action as signupAction} from "./pages/Signup"
+import { ToastContainer,   } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 const router = createBrowserRouter(createRoutesFromElements(
-  <Route path="/" element={<Layout />} errorElement={<Error />}>
+  
+  <Route path="/" element={<Layout />} errorElement={<Error />}> 
     <Route index loader={homeLoader} element={<Home />} />
     <Route path="shop" loader={productsLoader} element={<Shop />} />
     <Route path="shop/product/:id" loader={productInfoLoader} element={<ProductInfo />} />
@@ -26,6 +29,10 @@ const router = createBrowserRouter(createRoutesFromElements(
 ))
 export default function App(){
   return(
-    <RouterProvider router={router} />
+    <>
+      <ToastContainer />
+      <RouterProvider router={router} />
+    </>
+    
   )
 }
