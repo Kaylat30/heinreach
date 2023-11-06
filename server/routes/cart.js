@@ -1,11 +1,10 @@
 import express from "express"
 import {getCart,addToCart,deleteCart,updateCartAmount} from "../controllers/Cart.js"
-import { verifytoken } from "../middleware/auth.js"
-
+import { checkAuthenticated } from "../middleware/passport.js"
 const router = express.Router()
 
-router.get("/cart",verifytoken,getCart)
-router.post("/addToCart",verifytoken,addToCart)
-router.post("/deleteCart",verifytoken,deleteCart)
+router.get("/cart",checkAuthenticated,getCart)
+router.post("/addToCart",checkAuthenticated,addToCart)
+router.post("/deleteCart",checkAuthenticated,deleteCart)
 router.patch("/updateCartAmount",updateCartAmount)
 export {getCart,addToCart,deleteCart,updateCartAmount}

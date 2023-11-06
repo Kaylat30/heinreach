@@ -2,13 +2,14 @@ import { useState,useEffect, } from 'react';
 import { Link, NavLink ,useLocation, Form,useSearchParams, useNavigate } from 'react-router-dom';
 import image from '../imgs/logo.png';
 import {IoSearch,IoCart,IoPersonCircleOutline } from "react-icons/io5";
-import { getCart } from '../api';
+import { getCart,logoutUser } from '../api';
+import { toast } from "react-toastify"
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [count, setCount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -50,6 +51,9 @@ export default function Header() {
 
   const [showDiv, setShowDiv] = useState(false);
 
+  const isAuthenticated = !!localStorage.getItem('user');
+  const username = localStorage.getItem("user")
+
   const toggleDiv = () => {
     setShowDiv(!showDiv);
     // Close the menu when opening the account slider
@@ -65,6 +69,22 @@ export default function Header() {
   
     // You can navigate to the search results page with the query parameter
     navigate(`/shop?search=${searchQuery}`);
+  };
+
+  const handleLogout = async () => {
+    try {
+      // Call the logout API function
+      await logoutUser();
+  
+      // Optionally, clear any user-related data from local storage or state
+      localStorage.removeItem('user');
+  
+      toast.success(" logged out successfully",{
+        position: "bottom-left"
+      })
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   return (
@@ -179,13 +199,29 @@ export default function Header() {
         {showDiv && (
           <div className="fixed right-5 top-20 h-32 shadow-2xl w-1/3 bg-white overflow-hidden transition-all duration-1000">
             <div className="p-4 space-y-4">
-              <h1>hello, Kayondo</h1>
-              <Link
+              
+              {isAuthenticated ?
+              ( <>
+                <h1>hello, {username}</h1>
+                <button
+                  to="login"
+                  onClick={handleLogout}
+                  className="flex justify-center p-3 px-6 w-full md:mt-4 text-white font-bold bg-brightGreen rounded-lg baseline hover:bg-brightGreenLight"
+                >
+                  Logout
+                </button>
+                </>):
+                ( <>
+                  <h1>Welcome </h1>
+                  <Link
                   to="login"
                   className="flex justify-center p-3 px-6 w-full md:mt-4 text-white font-bold bg-brightGreen rounded-lg baseline hover:bg-brightGreenLight"
                 >
                   Login
                 </Link>
+                </>)
+                }
+              
             </div>
           </div>
         )}

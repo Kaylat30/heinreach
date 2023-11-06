@@ -1,6 +1,7 @@
 import { Form, Link,useNavigation,useNavigate,useLoaderData,useActionData } from "react-router-dom"
 import { useState,useEffect } from "react";
 import { LoginUser } from '../api';
+import { toast } from "react-toastify";
 
 export function loader() {
   return new URL(window.location.href).searchParams.get("message")
@@ -15,9 +16,16 @@ export async function action({request}) {
 
   try {
     // Attempt to log in the user
-    await LoginUser(email, password);
+    const user = await LoginUser(email, password);
+    if (user) {
+      toast.success("Logged in successfully", {
+        position: "bottom-left",
+      });
+      return { redirect: pathname };
+    } else {
+      return { error: "Invalid email or password" };
+    }
 
-    return { redirect: pathname };
   } catch (err) {
     return { error: err.message };
   }

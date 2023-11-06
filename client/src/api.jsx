@@ -11,8 +11,8 @@ export async function getProducts()
         }
     }
 
-    return data
- 
+    return data   
+
 }
 
 export async function getProductInfo(id)
@@ -58,14 +58,12 @@ export async function LoginUser(email,password)
         }
     }
 
-    const { token, user } = data;
+    const { user } = data;
 
-    // Store the token and user data in local storage or state for authentication
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", user);
+    // Store the user data in local storage or state for authentication
+    localStorage.setItem("user", user.firstname);
 
-
-    return data;
+    return user;
 
     } catch (error) {
     console.error("Login error: " + error.message);
@@ -114,6 +112,21 @@ export async function registerUser(firstname,lastname,email,password)
         
       }
 }
+
+export async function logoutUser() {
+    try {
+      const res = await fetch('http://localhost:3000/logout', {
+        method: 'POST',
+      });
+  
+      if (!res.ok) {
+        throw new Error(`Logout failed with status ${res.status}`);
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      throw error;
+    }
+}  
 
 export async function addCart(id)
 {

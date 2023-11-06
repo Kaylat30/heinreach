@@ -4,12 +4,10 @@ import Product from '../models/Product.js'
 //add Cart items 
 export const addToCart = async (req, res) => {
     try {
+
+      
         const { productId } = req.body;
         const sessionID = req.sessionID;
-        console.log("req.user:", req.user);
-        console.log("Is req.user undefined?", req.user === undefined);
-        console.log("sessionID:", sessionID);
-
 
         if (!productId) {
             return res.status(400).json({ error: 'productId is required' });
@@ -21,9 +19,9 @@ export const addToCart = async (req, res) => {
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        const cartQuery = req.user !== undefined
+        const cartQuery = req.user
             ? { product: productId, user: req.user._id }
-            : { product: productId, session: sessionID };
+            : { product: productId, session: sessionID };    
 
         let cartItem = await Cart.findOne(cartQuery);
 
@@ -34,7 +32,11 @@ export const addToCart = async (req, res) => {
             // Update the final price based on the updated quantity
             cartItem.finalprice = cartItem.amount * product.finalprice;
         } else {
-            // Create a new cart item
+
+          // Set the "previousSessionID" cookie
+          res.cookie('previousSessionID', sessionID);
+          
+            // Create a new cart item 
             cartItem = new Cart({
                 image: product.image,
                 name: product.name,
@@ -44,10 +46,12 @@ export const addToCart = async (req, res) => {
                 initialprice:product.initialprice,
                 discount: product.discount,
                 product: productId,
-                user: req.user !== undefined ? req.user._id : null,
-                session: req.user !== undefined ? null : sessionID,
+                user: req.user ? req.user._id : null,
+                session: req.user ? null : sessionID,
             });
         }
+
+        
 
         const savedCart = await cartItem.save();
         return res.status(201).json(savedCart);
@@ -64,7 +68,7 @@ export const getCart = async (req, res) => {
         ? { user: req.user._id }
         : { session: req.sessionID };
   
-      const cartItems = await Cart.find({});
+      const cartItems = await Cart.find(query);
   
       if (cartItems.length < 1) {
         return res.status(200).json({

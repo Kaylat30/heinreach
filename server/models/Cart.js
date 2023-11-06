@@ -13,7 +13,7 @@ const CartSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
         },
-        sessionID: String,
+        session: String,
         product: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product',

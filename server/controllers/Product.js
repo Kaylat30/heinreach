@@ -39,50 +39,17 @@ export const addProducts = async (req,res) =>
 //get all products
 export const getProducts = async (req,res) =>
 {
+
     try {
         let products = await Product.find({})
-        //  if (req.user) {
+        //  if (req.isAuthenticated()) {
         //     // User is authenticated, retrieve all products
-            
+        //     products = await Product.find({})
         // } else {
         //     // User is not authenticated, send a 401 status code and a message
         //     return res.status(401).json({ error: "Unauthorized: No token provided" });
-        // }      
-
-        //const {category,discount,maxPrice,minPrice} = req.query
-
-        //filter products by category
-        // if(category)
-        // {
-        //   products = products.filter((product)=>{
-        //     return product.category == category
-        //   })  
         // }
 
-        // // Filter products by discount percentage
-        // if (discount) {
-        //     const minDiscount = parseFloat(discount); // Ensure dis is parsed as a number
-        //     products = products.filter((product) => product.discount >= minDiscount);
-        // }
-
-        // // Filter products by price range (maxprice and minprice)
-        // if (maxPrice && minPrice) {
-        //     const minPrice = parseFloat(minPrice);
-        //     const maxPrice = parseFloat(maxPrice);
-        //     products = products.filter((product) => product.finalprice >= minPrice && product.finalprice <= maxPrice);
-        // } else if (minPrice) {
-        //     const minPrice = parseFloat(minPrice);
-        //     products = products.filter((product) => product.finalprice >= minPrice);
-        // } else if (maxPrice) {
-        //     const maxPrice = parseFloat(maxPrice);
-        //     products = products.filter((product) => product.finalprice <= maxPrice);
-        // }
-
-        //if no products matched the search
-        // if(products.length<1)
-        // {
-        //     return res.status(200).json({success:true,data:[],message:"No products matched your search"})
-        // }
         return res.status(200).json(products)
     } catch (error) {
         res.status(500).send({error : error.message})
