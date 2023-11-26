@@ -29,12 +29,13 @@ export const addToCart = async (req, res) => {
             // Increment the quantity if the item already exists in the cart
             cartItem.amount += 1;
 
-            // Update the final price based on the updated quantity
-            cartItem.finalprice = cartItem.amount * product.finalprice;
         } else {
 
           // Set the "previousSessionID" cookie
-          res.cookie('previousSessionID', sessionID);
+          res.cookie('previousSessionID', sessionID ,{
+              maxAge: 60000, // Set an appropriate maxAge
+              httpOnly: true, // For security
+            });
           
             // Create a new cart item 
             cartItem = new Cart({
@@ -63,23 +64,30 @@ export const addToCart = async (req, res) => {
 //get Cart items
 export const getCart = async (req, res) => {
     try {
-    
-    const query = req.user
-        ? { user: req.user._id }
-        : { session: req.sessionID };
-  
+      //console.log("Is authenticated:", req.isAuthenticated());
+
+    // const query = req.user
+    //     ? { user: req.user._id }
+    //     : { session: req.sessionID };
+
+      // Retrieve userId from the userSession cookie
+      const userId = req.cookies.userSession ? JSON.parse(req.cookies.userSession).userId : null;
+
+      //Use userId in your query to get cart items
+      const query = userId ? { user: userId } : { session: req.sessionID }  
+   
       const cartItems = await Cart.find(query);
   
       if (cartItems.length < 1) {
-        return res.status(200).json({
+        return res.status(200).json({ 
           success: true,
           data: [],
           message: req.user
             ? 'No items in the cart for the authenticated user'
             : 'No items in the cart for the anonymous user',
         });
-      }
-  
+      } 
+      
       return res.status(200).json(cartItems);
     } catch (error) {
       res.status(500).send({ error: error.message });
@@ -90,7 +98,7 @@ export const getCart = async (req, res) => {
 export const deleteCart = async (req, res) => {
     try {
       const { cartItemId } = req.body;
-  
+      
       const deletedCartItem = await Cart.findByIdAndDelete(cartItemId);
   
       if (!deletedCartItem) {

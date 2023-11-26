@@ -13,6 +13,7 @@
     import { initializePassport } from "./middleware/passport.js";
     import MongoStore from "connect-mongo";
     import Cart from "./models/Cart.js";
+    
 
     // Configurations
     const  app = express()
@@ -21,34 +22,33 @@
         origin: "http://localhost:5173",
         methods: ['GET','POST','PATCH','DELETE','PUT'],
         allowedHeaders: ['Content-Type'],
+        credentials: true,
     }))
     dotenv.config(); // Load environment variables from .env file
-
 
     //MIDDLEWARE 
     //AUTHENTICATION    
 
     initializePassport(passport)
     const sessionStore = new MongoStore({
+        mongooseConnection: mongoose.connection,
         mongoUrl: process.env.MONGO_URL, // MongoDB connection URL
         collectionName: 'sessions', // Collection to store sessions in
         autoRemove: 'interval', // Automatically remove expired sessions
         autoRemoveInterval: 1, // Interval in minutes for session cleanup
-    });
+    });    
 
     // Remove cart items for expired sessions
-    sessionStore.on('cleanup', async () => {
-        console.log('Sessions to prune:', sessionStore.sessionsToPrune);
-        // Find and remove cart items with expired session IDs
-        await Cart.deleteMany({ session: { $in: sessionStore.sessionsToPrune } }, (err, result) => {
-            if (err) {
-              console.error('Error deleting cart items:', err);
-            } else {
-              console.log('Deleted cart items:', result.deletedCount);
-            }
-          });
-          
+    sessionStore.on('expired', async (session) => {
+        console.log(`Session expired: ${session.id}`);
+        try {
+            await Cart.deleteMany({ session: session.id });
+            console.log(`Cart items deleted for expired session: ${session.id}`);
+        } catch (error) {
+            console.error(`Error deleting cart items: ${error.message}`);
+        }
     });
+
 
     app.use(cookieParser(process.env.JWT_SECRET));
     app.use(flash())
@@ -58,12 +58,15 @@
         saveUninitialized: true,
         store: sessionStore,
         cookie:{
-            // maxAge: 1000 * 60 * 60 * 24 //equals  1 day
-            maxAge: 60000 //600000
+            maxAge: 60000, 
+            httpOnly: true,
+            //sameSite: 'None', 
+            //secure: true,       
         }
     }))
     app.use(passport.initialize())
     app.use(passport.session())
+    
 
     // MONGOOSE SETUP
     const PORT = process.env.PORT || 5000

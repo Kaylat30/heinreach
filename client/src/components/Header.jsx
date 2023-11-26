@@ -4,6 +4,7 @@ import image from '../imgs/logo.png';
 import {IoSearch,IoCart,IoPersonCircleOutline } from "react-icons/io5";
 import { getCart,logoutUser } from '../api';
 import { toast } from "react-toastify"
+import Cookies from 'js-cookie';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -48,11 +49,14 @@ export default function Header() {
     setMenuOpen(false);
     setShowDiv(false);
   }, [location.pathname]);
-
+ 
   const [showDiv, setShowDiv] = useState(false);
 
-  const isAuthenticated = !!localStorage.getItem('user');
-  const username = localStorage.getItem("user")
+  // Access the firstname from the userSession cookie
+  const userSessionCookie = Cookies.get('userSession');
+  const userSessionData = userSessionCookie ? JSON.parse(userSessionCookie) : {};
+  const isAuthenticated = !!userSessionData.userId;
+  const username = userSessionData.firstname || "";
 
   const toggleDiv = () => {
     setShowDiv(!showDiv);
@@ -76,8 +80,8 @@ export default function Header() {
       // Call the logout API function
       await logoutUser();
   
-      // Optionally, clear any user-related data from local storage or state
-      localStorage.removeItem('user');
+      // Remove the 'userSession' cookie
+      Cookies.remove('userSession');
   
       toast.success(" logged out successfully",{
         position: "bottom-left"

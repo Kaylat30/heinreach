@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { getProducts,addCart,getCart,updateCartAmount } from "../api";
+import { getProducts,addCart } from "../api";
 import { Await, Form, Link, defer, useLoaderData,useSearchParams } from "react-router-dom";
 import { useState, } from "react";
 import Slider from 'react-slider';
@@ -64,41 +64,22 @@ export default function Shop()
     
   };
 
-  const handleAmountChange = async(change,product) => {
-    const newAmount = product.amount + change;
-    if (newAmount >= 1) {
-      await updateCartAmount(newAmount, product._id); 
-      toast.success(`${product.name} amount updated successfully`,{
-        position: "bottom-left"
-      })
-    }
-  };
   
   const addToCart = async (product) => {
     try {
 
-      // Check if the product already exists in the cart
-      const cartItems = await getCart()
-
-      if (Array.isArray(cartItems) && cartItems.length > 0) {
-        const existingProduct = cartItems.find((item) => item.product === product._id);
-  
-        if (existingProduct) {
-          handleAmountChange(1, existingProduct);
-        } else {
-          await addCart(product._id);
-          toast.success(`${product.name} added to the cart successfully`, {
-            position: "bottom-left"
-          });
-        }
-      } else {
-
-        await addCart(product._id);
-        toast.success(`${product.name} added to cart successfully`,{
-          position: "bottom-left"
-        })
-
-      }
+     const Itemadded = await addCart(product._id);
+     if(Itemadded)
+     {
+      toast.success(`${product.name} added to cart successfully`,{
+        position: "bottom-left"
+      })
+     }else{
+      toast.error(`${product.name} not added to cart`,{
+        position: "bottom-left"
+      })
+     }
+        
   
     } catch (error) {
       console.log(error);

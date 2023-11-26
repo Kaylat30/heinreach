@@ -2,7 +2,7 @@ import { IoChevronForward,IoStarHalf,IoStar,IoStarOutline,IoCheckmarkDoneCircleO
 import { Link,defer,useLocation,useLoaderData, Await } from "react-router-dom";
 import { Suspense } from 'react';
 import iphone from "../imgs/Apple_Iphone_14.png" ;
-import { getProductInfo,getProducts,addCart,getCart,updateCartAmount} from "../api";
+import { getProductInfo,getProducts,addCart } from "../api";
 import { toast } from "react-toastify";
 
 function shuffleArray(array) {
@@ -39,42 +39,22 @@ export default function ProductInfo()
     var slider = document.getElementById('slider')
     slider.scrollLeft = slider.scrollLeft + 500
   }
-
-  const handleAmountChange = async(change,product) => {
-    const newAmount = product.amount + change;
-    if (newAmount >= 1) {
-      await updateCartAmount(newAmount, product._id); 
-      toast.success(`${product.name} amount updated successfully`,{
-        position: "bottom-left"
-      })
-    }
-  };
   
   const addToCart = async (product) => {
     try {
 
-      // Check if the product already exists in the cart
-      const cartItems = await getCart()
-
-      if (Array.isArray(cartItems) && cartItems.length > 0) {
-        const existingProduct = cartItems.find((item) => item.product === product._id);
-  
-        if (existingProduct) {
-          handleAmountChange(1, existingProduct);
-        } else {
-          await addCart(product._id);
-          toast.success(`${product.name} added to the cart successfully`, {
-            position: "bottom-left"
-          });
-        }
-      } else {
-
-        await addCart(product._id);
-        toast.success(`${product.name} added to cart successfully`,{
-          position: "bottom-left"
-        })
-
-      }
+     const Itemadded = await addCart(product._id);
+     if(Itemadded)
+     {
+      toast.success(`${product.name} added to cart successfully`,{
+        position: "bottom-left"
+      })
+     }else{
+      toast.error(`${product.name} not added to cart`,{
+        position: "bottom-left"
+      })
+     }
+        
   
     } catch (error) {
       console.log(error);

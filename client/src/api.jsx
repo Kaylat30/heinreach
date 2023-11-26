@@ -46,6 +46,7 @@ export async function LoginUser(email,password)
         "Content-Type": "application/json",
         },
         body: JSON.stringify(requestBody),
+        credentials: 'include' 
     });
 
     const data = await res.json();
@@ -58,12 +59,7 @@ export async function LoginUser(email,password)
         }
     }
 
-    const { user } = data;
-
-    // Store the user data in local storage or state for authentication
-    localStorage.setItem("user", user.firstname);
-
-    return user;
+    return data;
 
     } catch (error) {
     console.error("Login error: " + error.message);
@@ -87,6 +83,7 @@ export async function registerUser(firstname,lastname,email,password)
             "Content-Type": "application/json",
           },
           body: JSON.stringify(requestBody),
+          credentials: 'include' 
         });
 
         const data = await res.json();
@@ -117,6 +114,7 @@ export async function logoutUser() {
     try {
       const res = await fetch('http://localhost:3000/logout', {
         method: 'POST',
+        credentials: 'include' 
       });
   
       if (!res.ok) {
@@ -138,6 +136,7 @@ export async function addCart(id)
         "Content-Type": "application/json",
         },
         body: JSON.stringify({ productId: id }),
+        credentials: 'include' 
     });
 
     const data = await res.json();
@@ -168,6 +167,7 @@ export async function deleteCart(id)
         "Content-Type": "application/json",
         },
         body: JSON.stringify({ cartItemId: id }),
+        credentials: 'include' 
     });
 
     const data = await res.json();
@@ -191,7 +191,10 @@ export async function deleteCart(id)
 
 export async function getCart()
 {
-    const res = await fetch("http://localhost:3000/cart")
+    const res = await fetch("http://localhost:3000/cart", {
+        method: "GET",
+        credentials: 'include',    
+  });
     const data = await res.json()
 
     if (!res.ok) {
@@ -214,6 +217,7 @@ export async function updateCartAmount(newAmount, id) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ productId: id,newAmount:newAmount }),
+      credentials: 'include' 
     })
 
     const data = await res.json();

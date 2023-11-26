@@ -19,7 +19,7 @@ const CartSchema = new mongoose.Schema(
             ref: 'Product',
         },
     },
-    { timestamps: true }
+    { timestamps: true } 
 );
 
 const Cart = mongoose.model("Cart",CartSchema)
