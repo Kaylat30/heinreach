@@ -6,7 +6,7 @@
     import dotenv from "dotenv";
     import { register,logout,login } from "./routes/auth.js"
     import {addProducts,getProducts,getProductInfo} from "./routes/product.js"
-    import {getCart,addToCart,deleteCart,updateCartAmount} from "./routes/cart.js"
+    import {getCart,addToCart,deleteCart,updateCartAmount,checkout} from "./routes/cart.js"
     import flash from "express-flash";
     import passport from "passport";
     import cookieParser from "cookie-parser";
@@ -66,6 +66,7 @@
     }))
     app.use(passport.initialize())
     app.use(passport.session())
+  
     
 
     // MONGOOSE SETUP
@@ -90,6 +91,7 @@
     app.use("/cart",getCart)
     app.use("/deleteCart",deleteCart)
     app.use("/updateCartAmount",updateCartAmount)
+    app.use("/checkout",checkout)
 
 
 

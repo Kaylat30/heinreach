@@ -1,12 +1,7 @@
-import { Form, Link,useNavigation,useNavigate,useLoaderData,useActionData } from "react-router-dom"
+import { Form, Link,useNavigation,useNavigate,useActionData } from "react-router-dom"
 import { useState,useEffect } from "react";
 import { LoginUser } from '../api';
 import { toast } from "react-toastify";
-
-export function loader() {
-  return new URL(window.location.href).searchParams.get("message")
-}
-
 
 export async function action({request}) {
   const formData = await request.formData()
@@ -34,7 +29,7 @@ export async function action({request}) {
 export default function Login()
 { 
     const actionData= useActionData()
-    const message = useLoaderData()
+    const message = new URL(window.location.href).searchParams.get("message")
     const navigation = useNavigation() 
     const navigate = useNavigate()
 

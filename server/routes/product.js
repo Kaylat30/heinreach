@@ -6,7 +6,7 @@ import passport from 'passport';
 const router = express.Router()
 
 router.post("/addproducts",addProducts)
-router.get("/shop",checkAuthenticated,getProducts)
+router.get("/shop",getProducts)
 router.get("/product/:id",getProductInfo)
 
 export {addProducts,getProducts,getProductInfo}

@@ -35,6 +35,7 @@ export const register = async (req,res) =>
 
 // Logging in
 export const login = (req, res, next) => {
+
     passport.authenticate('local', (err, user, info) => {
       if (err) {
         return res.status(500).json({ error: err.message });
@@ -42,17 +43,16 @@ export const login = (req, res, next) => {
       if (!user) {
         return res.status(400).json({ error: 'Invalid credentials' });
       }
-  
+   
       req.logIn(user, async(err) => {
         if (err) {
           return res.status(500).json({ error: err.message });
         }        
  
-        res.cookie('userSession', JSON.stringify({userId:user._id,firstname:user.firstname}), {
-          maxAge: 60000, 
-        });
+      res.cookie('firstname', JSON.stringify({firstname:user.firstname}), {
+        maxAge: 60000, 
+      }); 
 
-        req.session.userId = user._id
 
         // After successful login, check if there are items in the cart with the previous session ID
         const oldsessionID = req.cookies.previousSessionID;

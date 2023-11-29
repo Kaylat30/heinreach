@@ -52,11 +52,11 @@ export default function Header() {
  
   const [showDiv, setShowDiv] = useState(false);
 
-  // Access the firstname from the userSession cookie
-  const userSessionCookie = Cookies.get('userSession');
-  const userSessionData = userSessionCookie ? JSON.parse(userSessionCookie) : {};
-  const isAuthenticated = !!userSessionData.userId;
-  const username = userSessionData.firstname || "";
+  // Access the firstname from the firstname cookie
+  const firstnameCookie = Cookies.get('firstname');
+  const firstnameData = firstnameCookie ? JSON.parse(firstnameCookie) : {};
+  const isAuthenticated = !!firstnameData.firstname;
+  const username = firstnameData.firstname || "";
 
   const toggleDiv = () => {
     setShowDiv(!showDiv);
@@ -80,8 +80,8 @@ export default function Header() {
       // Call the logout API function
       await logoutUser();
   
-      // Remove the 'userSession' cookie
-      Cookies.remove('userSession');
+      // Remove the 'firstname' cookie
+      Cookies.remove('firstname');
   
       toast.success(" logged out successfully",{
         position: "bottom-left"

@@ -64,17 +64,10 @@ export const addToCart = async (req, res) => {
 //get Cart items
 export const getCart = async (req, res) => {
     try {
-      //console.log("Is authenticated:", req.isAuthenticated());
 
-    // const query = req.user
-    //     ? { user: req.user._id }
-    //     : { session: req.sessionID };
-
-      // Retrieve userId from the userSession cookie
-      const userId = req.cookies.userSession ? JSON.parse(req.cookies.userSession).userId : null;
-
-      //Use userId in your query to get cart items
-      const query = userId ? { user: userId } : { session: req.sessionID }  
+      const query =req.user
+      ? { user: req.user._id }
+      : { session: req.sessionID } 
    
       const cartItems = await Cart.find(query);
   
@@ -120,6 +113,7 @@ export const deleteCart = async (req, res) => {
     }
   };
 
+  //Updating cart amount
   export const updateCartAmount = async (req, res) => {
     try {
       const { productId,newAmount } = req.body; 
@@ -149,6 +143,21 @@ export const deleteCart = async (req, res) => {
       });
     }
   };
+
+  //checking out cart items
+  export const checkout = async (req, res) => {
+    try {
+        
+        const userId = req.user._id;
+
+        // Delete all cart items associated with the authenticated user
+        await Cart.deleteMany({ user: userId });
+
+        res.status(200).json({ success: true, message: 'Checkout successful' });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
   
   
 

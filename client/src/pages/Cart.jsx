@@ -1,9 +1,10 @@
 import { IoChevronForward,IoChevronBack, IoTrashBin, IoAlertCircleOutline } from "react-icons/io5";
 import { Link,defer,useLoaderData } from "react-router-dom";
-import { getCart, getProducts,deleteCart,updateCartAmount } from "../api";
+import { getCart, getProducts,deleteCart,updateCartAmount, checkout } from "../api";
 import iphone from "../imgs/Apple_Iphone_14.png" ;
 import { useState,useEffect } from "react";
 import { toast } from "react-toastify";
+import Cookies from 'js-cookie';
 
 function shuffleArray(array) {
   
@@ -28,18 +29,33 @@ export default function Cart()
   const [cartItems, setCartItems] = useState(loaderData.cartItems);
 
   useEffect(() => {
-    setCartItems(loaderData.cartItems);
-  }, [loaderData.cartItems]);
+    const fetchCart = async () => {
+      try {
+        const cartData = await getCart();
+        setCartItems(cartData);
+        
+      } catch (error) {
+        console.error('Error fetching cart items:', error);
+      }
+    };
+
+    fetchCart(); 
+
+    
+  }, [cartItems]);
 
   let count = cartItems.length == undefined ? 0 : cartItems.length
 
   const deleteCartItem = async(product)=>{
     try {
-      await deleteCart(product._id);
-      setCartItems(cartItems.filter((item) => item._id !== product._id));
-      toast.success(`${product.name} removed successfully`,{
-        position: "bottom-left"
-      })
+       const deleted = await deleteCart(product._id);
+       if(deleted)
+       {
+        toast.success(`${product.name} removed successfully`,{
+          position: "bottom-left"
+        })
+       }
+      
     } catch (error) {
       console.log(error)
     }
@@ -70,20 +86,35 @@ export default function Cart()
 
   const handleAmountChange = async(change,product) => {
     const newAmount = product.amount + change;
-    if (newAmount >= 1) {
-      const updatedItems = cartItems.map((item) => {
-        if (item._id === product._id) {
-          return { ...item, amount: newAmount };
-        }
-        return item;
-      });
-      setCartItems(updatedItems);
       await updateCartAmount(newAmount, product._id); 
       toast.success(`${product.name} amount updated successfully`,{
         position: "bottom-left"
       })
     }
-  };
+  
+
+  const handleCheckout = async() => {
+    try {
+      
+      await checkout();
+  
+       toast.success("Checked out successfully",{
+         position: "bottom-left"
+       })
+      
+     
+   } catch (error) {
+     console.log(error)
+   }
+  }
+
+  // Check firstname from the firstname cookie
+  const firstnameCookie = Cookies.get('firstname');
+  const firstnameData = firstnameCookie ? JSON.parse(firstnameCookie) : {};
+  const isAuthenticated = !!firstnameData.firstname;
+
+  const pathname = new URL(window.location.href).pathname;
+
   
   // Calculate the subtotal
   const calculateSubtotal = () => {
@@ -161,11 +192,19 @@ export default function Cart()
                 <div>
                     {renderCartItems()}
                 </div>
-                <button
-                  className="block p-3 px-6 w-full md:mt-4 text-white font-bold bg-brightGreen rounded-lg baseline hover:bg-brightGreenLight"
+                {isAuthenticated 
+                ? (<button
+                  onClick={()=> handleCheckout()}
+                  className="flex justify-center p-3 px-6 w-full md:mt-4 text-white font-bold bg-brightGreen rounded-lg baseline hover:bg-brightGreenLight"
                 >
                   CHECKOUT (UGX {calculateSubtotal()})
-                </button>
+                </button>)
+                :(<Link to={`/login?message=You must log in first.&redirectTo=${pathname}`}
+                  className="flex justify-center p-3 px-6 w-full  md:mt-4 text-white font-bold bg-brightGreen rounded-lg baseline hover:bg-brightGreenLight"
+                >
+                  CHECKOUT (UGX {calculateSubtotal()})
+                </Link>)}
+                
             </section>
 
             {/*you may also like section  */}
@@ -203,4 +242,5 @@ export default function Cart()
             </section> 
         </div>
     )
+
 }

@@ -192,7 +192,7 @@ export async function deleteCart(id)
 export async function getCart()
 {
     const res = await fetch("http://localhost:3000/cart", {
-        method: "GET",
+        method: "POST",
         credentials: 'include',    
   });
     const data = await res.json()
@@ -235,4 +235,26 @@ export async function updateCartAmount(newAmount, id) {
         console.log(error)
     }
     
+}
+
+export async function checkout() {
+    try {
+        const response = await fetch('http://localhost:3000/checkout', {
+            method: 'POST',
+            credentials: 'include',
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw {
+                message: data.error,
+                statusText: response.statusText,
+                status: response.status,
+            };
+        }
+
+    } catch (error) {
+        console.error('Error during checkout:', error.message);
+    }
 }
