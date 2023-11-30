@@ -94,7 +94,7 @@ export default function ProductInfo()
       <>
         {/* product info section */}
         <Link
-          to={`..${search}`}
+          to={`../..${search}`}
           relative="path"
           className="back-button"
           >&larr; <span>Back to {cat} products</span>

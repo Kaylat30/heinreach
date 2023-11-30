@@ -190,11 +190,11 @@ export default function Home() {
                   <Link to={`shop?category=${cat}`}> See All</Link>
                 </div>
                 <div className='relative flex items-center bg-white rounded-b-md'>
-                  <IoChevronBack className=' opacity-50 cursor-pointer hover:opacity-100' onClick={slideLeft} size={40} />
-                  <div id='slider' className='w-full  space-x-4  h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide'>
+                  <IoChevronBack className=' opacity-50 cursor-pointer hover:opacity-100' onClick={()=>slideLeft(i)} size={40} />
+                  <div id={`slider${i}`} className='w-full  space-x-4  h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide'>
                   {renderFlashCategoryProducts(cat)}
                   </div>
-                  <IoChevronForward className=' opacity-50 cursor-pointer hover:opacity-100' onClick={slideRight} size={40} />
+                  <IoChevronForward className=' opacity-50 cursor-pointer hover:opacity-100' onClick={()=>slideRight(i)} size={40} />
                 </div>
             </div>
         </div>
@@ -289,13 +289,19 @@ export default function Home() {
   }
 
   // horizontal scroll slider buttons
-  const slideLeft =()=>{
-    var slider = document.getElementById('slider')
+  const slideLeft =(i)=>{
+    
+    let slider = document.getElementById(`slider${i}`)
     slider.scrollLeft = slider.scrollLeft - 500
+    
+    
   }
-  const slideRight =()=>{
-    var slider = document.getElementById('slider')
+  const slideRight =(i)=>{
+    
+    let slider = document.getElementById(`slider${i}`)
     slider.scrollLeft = slider.scrollLeft + 500
+    
+    
   }
 
     return(
@@ -318,8 +324,8 @@ export default function Home() {
             <div className='flex justify-center sm:mx-8   lg:mx-20 flex-col'>
                 <div className='bg-green-700 h-12 items-center md:text-2xl rounded-t-md text-black  flex justify-center'>Categories</div>
                 <div className='relative flex items-center bg-white rounded-b-md'>
-                  <IoChevronBack className=' opacity-50 cursor-pointer hover:opacity-100' onClick={slideLeft} size={40} />
-                  <div id='slider' className='w-full  space-x-4  h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide'>
+                  <IoChevronBack className=' opacity-50 cursor-pointer hover:opacity-100' onClick={()=>slideLeft(-1)} size={40} />
+                  <div id='slider-1' className='w-full  space-x-4  h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide'>
                   {imagescroll.map((image,index)=>(
                     <Link key={index} to={`shop?category=${image.category}`} className='my-4 relative inline-block rounded-lg xsm:h-20 xsm:w-20 md:h-32 md:w-32'>
                       <img className='rounded-lg xsm:h-20 xsm:w-20 md:w-32 md:h-32 cursor-pointer hover:scale-105 ease-in-out duration-300' src={pads}/>
@@ -327,7 +333,7 @@ export default function Home() {
                     </Link>
                   ))}
                   </div>
-                  <IoChevronForward className=' opacity-50 cursor-pointer hover:opacity-100' onClick={slideRight} size={40} />
+                  <IoChevronForward className=' opacity-50 cursor-pointer hover:opacity-100' onClick={()=>slideRight(-1)} size={40} />
                 </div>
             </div>         
 
@@ -338,39 +344,14 @@ export default function Home() {
                 <div> Time Left: <span className='font-bold'>{remainingTime}</span></div>
               </div>
               <div className='relative flex items-center bg-white rounded-b-md'>
-                <IoChevronBack className=' opacity-50 cursor-pointer hover:opacity-100' onClick={slideLeft} size={40} />
-                <div id='slider' className='w-full  space-x-4  h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide'>
+                <IoChevronBack className=' opacity-50 cursor-pointer hover:opacity-100' onClick={()=>slideLeft(-2)} size={40} />
+                <div id='slider-2' className='w-full  space-x-4  h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide'>
                 {renderFlashCategoryProducts()}
                 </div>
-                <IoChevronForward className=' opacity-50 cursor-pointer hover:opacity-100' onClick={slideRight} size={40} />
+                <IoChevronForward className=' opacity-50 cursor-pointer hover:opacity-100' onClick={()=>slideRight(-2)} size={40} />
               </div>
           </div> 
 
-            {/* Category intro section  */}
-            {/* <div className='flex justify-center sm:mx-8   lg:mx-20 flex-col'>
-                <div className='bg-brightGreenLight h-12 items-center md:text-2xl rounded-t-md text-black  flex justify-center px-1 sm:px-4'>
-                    Deals on Phones
-                </div>
-                <div className='relative flex items-center bg-white rounded-b-md'>
-                    {renderCategoryIntro("Clothes")}
-                </div>
-            </div> */}
-
-
-            {/*Phones section  */}
-            {/* <div className='flex justify-center sm:mx-8   lg:mx-20 flex-col'>
-                <div className='bg-brightGreenLight h-12 items-center md:text-2xl rounded-t-md text-black  flex justify-between px-1 sm:px-4'>
-                  <div className='font-bold'>Phones & Tablets </div>
-                  <div> See All</div>
-                </div>
-                <div className='relative flex items-center bg-white rounded-b-md'>
-                  <IoChevronBack className=' opacity-50 cursor-pointer hover:opacity-100' onClick={slideLeft} size={40} />
-                  <div id='slider' className='w-full  space-x-4  h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide'>
-                  {renderFlashCategoryProducts('Clothes')}
-                  </div>
-                  <IoChevronForward className=' opacity-50 cursor-pointer hover:opacity-100' onClick={slideRight} size={40} />
-                </div>
-            </div> */}
             {renderCatIntroProducts()}
 
             {/* newsletter section */}
