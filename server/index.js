@@ -31,7 +31,6 @@
 
     initializePassport(passport)
     const sessionStore = new MongoStore({
-        mongooseConnection: mongoose.connection,
         mongoUrl: process.env.MONGO_URL, // MongoDB connection URL
         collectionName: 'sessions', // Collection to store sessions in
         autoRemove: 'interval', // Automatically remove expired sessions
