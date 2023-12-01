@@ -51,7 +51,7 @@
 
 
     app.use(cookieParser(process.env.JWT_SECRET));
-    app.use(flash())
+    app.use(flash()) 
     app.use(session({
         secret: process.env.JWT_SECRET,
         resave: false,
