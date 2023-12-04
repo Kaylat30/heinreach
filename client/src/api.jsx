@@ -1,6 +1,6 @@
 export async function getProducts()
 {
-    const res = await fetch("https://heinreach-server-kayondo-abdulatifs-projects.vercel.app/shop")
+    const res = await fetch("https://heinreach-server.vercel.app/shop")
     const data = await res.json()
 
     if (!res.ok) {
@@ -17,7 +17,7 @@ export async function getProducts()
 
 export async function getProductInfo(id)
 {
-    const res = await fetch(`https://heinreach-server-kayondo-abdulatifs-projects.vercel.app/product/${id}`)
+    const res = await fetch(`https://heinreach-server.vercel.app/product/${id}`)
     const data = await res.json()
 
     if (!res.ok) {
@@ -40,7 +40,7 @@ export async function LoginUser(email,password)
     };
 
     try {
-    const res = await fetch("https://heinreach-server-kayondo-abdulatifs-projects.vercel.app/login", {
+    const res = await fetch("https://heinreach-server.vercel.app/login", {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -77,7 +77,7 @@ export async function registerUser(firstname,lastname,email,password)
       };
   
       try {
-        const res = await fetch("https://heinreach-server-kayondo-abdulatifs-projects.vercel.app/signup", {
+        const res = await fetch("https://heinreach-server.vercel.app/signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -112,7 +112,7 @@ export async function registerUser(firstname,lastname,email,password)
 
 export async function logoutUser() {
     try {
-      const res = await fetch('https://heinreach-server-kayondo-abdulatifs-projects.vercel.app/logout', {
+      const res = await fetch('https://heinreach-server.vercel.app/logout', {
         method: 'POST',
         credentials: 'include' 
       });
@@ -130,7 +130,7 @@ export async function addCart(id)
 {
 
     try {
-    const res = await fetch("https://heinreach-server-kayondo-abdulatifs-projects.vercel.app/addToCart", {
+    const res = await fetch("https://heinreach-server.vercel.app/addToCart", {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -161,7 +161,7 @@ export async function deleteCart(id)
 {
 
     try {
-    const res = await fetch("https://heinreach-server-kayondo-abdulatifs-projects.vercel.app/deleteCart", {
+    const res = await fetch("https://heinreach-server.vercel.app/deleteCart", {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -191,7 +191,7 @@ export async function deleteCart(id)
 
 export async function getCart()
 {
-    const res = await fetch("https://heinreach-server-kayondo-abdulatifs-projects.vercel.app/cart", {
+    const res = await fetch("https://heinreach-server.vercel.app/cart", {
         method: "POST",
         credentials: 'include',    
   });
@@ -211,7 +211,7 @@ export async function getCart()
 
 export async function updateCartAmount(newAmount, id) {
     try {
-        const res = await fetch("https://heinreach-server-kayondo-abdulatifs-projects.vercel.app/updateCartAmount", {
+        const res = await fetch("https://heinreach-server.vercel.app/updateCartAmount", {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -239,7 +239,7 @@ export async function updateCartAmount(newAmount, id) {
 
 export async function checkout() {
     try {
-        const response = await fetch('https://heinreach-server-kayondo-abdulatifs-projects.vercel.app/checkout', {
+        const response = await fetch('https://heinreach-server.vercel.app/checkout', {
             method: 'POST',
             credentials: 'include',
         });
