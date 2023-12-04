@@ -19,7 +19,7 @@
     const  app = express()
     app.use(express.json())
     app.use(cors({
-        origin: "https://heinreach.vercel.app",
+        origin: "https://heinreach.vercel.app/",
         methods: ['GET','POST','PATCH','DELETE','PUT'],
         allowedHeaders: ['Content-Type'],
         credentials: true,
