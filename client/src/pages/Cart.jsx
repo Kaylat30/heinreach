@@ -1,7 +1,7 @@
 import { IoChevronForward,IoChevronBack, IoTrashBin, IoAlertCircleOutline } from "react-icons/io5";
 import { Link,defer,useLoaderData } from "react-router-dom";
 import { getCart, getProducts,deleteCart,updateCartAmount, checkout } from "../api";
-import iphone from "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.forbes.com%2Fsites%2Fgordonkelly%2F2023%2F04%2F01%2Fapple-iphone-15-pro-max-new-volume-mute-buttons-design-changes%2F&psig=AOvVaw3WWIvrcU2-IeJr3JNbbvYb&ust=1701794044371000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCKiq8P6a9oIDFQAAAAAdAAAAABAE" ;
+import iphone from "../imgs/pads.jpg" ;
 import { useState,useEffect } from "react";
 import { toast } from "react-toastify";
 import Cookies from 'js-cookie';
