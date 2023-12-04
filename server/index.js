@@ -66,10 +66,11 @@
     app.use(passport.initialize())
     app.use(passport.session())
 
-    // app.use((req, res, next) => {
-    //     res.setHeader('Access-Control-Allow-Origin', 'https://heinreach.vercel.app');
-    //     next();
-    //   });
+    app.use((req, res, next) => {
+        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+        res.setHeader('Access-Control-Allow-Credentials', 'true'); 
+        next();
+      });
       
   
     
