@@ -5,7 +5,6 @@ import slide_img3 from '../imgs/slide_img3.jpg';
 import slide_img4 from "../imgs/slide_img4.jpg" 
 import pads from "../imgs/pads.jpg" ;
 import design from "../imgs/design.jpg" ;
-import iphone from "../imgs/pads.jpg" ;
 import {IoChevronForward,IoChevronBack} from "react-icons/io5";
 import { Link,defer, useLoaderData } from 'react-router-dom';
 import { getProducts } from "../api";
@@ -83,63 +82,44 @@ export default function Home() {
   const imagescroll = [
     {
       image: slide_img1, 
-      category: "Clothes",
-      name: "Infinix Hot 30 Play",
-      price: 239000     
+      category: "Phones & Tablets",    
     },
     {
       image: slide_img2,
-      category: "Gaming" ,
-      name: "Hp Elite X2",
-      price: 239000 
+      category: "Appliances" ,
     },
     {
       image: slide_img3,
-      category: "Gaming",
-      name: "Electric dry Iron",
-      price: 239000   
+      category: "Fashion",  
     },
     {
       image: slide_img4,
-      category: "Gaming",
-      name: "Stabex Gas",
-      price: 239000  
+      category: "Home", 
     },
     {
       image: slide_img2,
-      category: "Gaming",
-      name: "Minute Maid",
-      price: 239000 
+      category: "Supermarket",
     },
     {
       image: slide_img1, 
-      category: "Gaming",
-      name: "Lato Milk",
-      price: 239000      
+      category: "Health & Beauty",     
     },
     {
       image: slide_img2,
-      category: "Gaming",
-      name: "Shoes",
-      price: 239000  
+      category: "Baby Products", 
     },
     {
       image: slide_img3,
-      category: "Gaming",
-      name: "Sugar",
-      price: 239000  
+      category: "Gaming", 
     },
     {
       image: slide_img4,
-      category: "Gaming",
-      name: "Bue Band",
-      price: 239000  
+      category: "Computing",
+
     },
     {
       image: slide_img2,
-      category: "Gaming",
-      name: "Soap",
-      price: 239000  
+      category: "TV'S & Audio",
     },
   ];
 
@@ -168,7 +148,7 @@ export default function Home() {
   const currentSlideData = slides[currentSlide];
 
   const renderCatIntroProducts =()=>{
-    let category = ["Furniture","Drinks","Clothes","Phones","Fashion","Home"]
+    let category = ["Phones & Tablets","Gaming","TV'S & Audio","Appliances","Health & Beauty","Baby Products","Computing","Supermarket","Fashion","Home"]
 
       return category.map((cat,i)=>(
         <div key={i} className='space-y-5'>
@@ -221,17 +201,17 @@ export default function Home() {
   const renderFlashCategoryProducts = (category)=>{
     
     if (category) {
-      const categoryProducts = products.filter(product => product.category === category).slice(0, 5);
+      const categoryProducts = products.filter(product => product.category === category).slice(0, 8);
       
       return (
         <>
           {categoryProducts.map((product) => (
             <Link to={`/shop/product/${product._id}`} key={product._id} className='my-4 relative inline-block rounded-lg xsm:h-36 xsm:w-30 md:h-64 md:w-44 cursor-pointer hover:scale-105 ease-in-out duration-300 hover:shadow-xl'>
             <div className='flex justify-center'>
-               <img className='rounded-lg xsm:h-20 xsm:w-20 md:w-40 md:h-40' src={iphone}/>
+               <img className='rounded-lg xsm:h-20 xsm:w-20 md:w-40 md:h-40' src={product.image}/>
                <h1 className='absolute bg-gray-200 rounded-sm text-brightGreen top-1 right-2  font-bold xsm:text-sm md:text-md'>-{product.discount}%</h1>
              </div>                      
-             <div className='md:ml-4 ml-2 sm:mt-4'>
+             <div className='md:ml-4 ml-2 sm:mt-4 '>
                <h1 className='text-xs md:text-lg'>{product.name}</h1>
                <h1 className=' font-bold md:text-xl text-sm'>{product.finalprice.toLocaleString()}</h1>
                <h1 className='text-sm hidden md:block line-through'>{product.initialprice.toLocaleString()}</h1>
@@ -244,10 +224,10 @@ export default function Home() {
       // If no category is provided, display all products
       return (
         <>
-          {products.slice(0,5).map((product)=>(
+          {products.slice(0,8).map((product)=>(
            <Link to={`/shop/product/${product._id}`} key={product._id} className='my-4 relative inline-block rounded-lg xsm:h-36 xsm:w-30 md:h-64 md:w-44 cursor-pointer hover:scale-105 ease-in-out duration-300 hover:shadow-xl'>
              <div className='flex justify-center'>
-               <img className='rounded-lg xsm:h-20 xsm:w-20 md:w-40 md:h-40' src={iphone}/>
+               <img className='rounded-lg xsm:h-20 xsm:w-20 md:w-40 md:h-40' src={product.image}/>
                <h1 className='absolute bg-gray-200 rounded-sm text-brightGreen top-1 right-2  font-bold xsm:text-sm md:text-md'>-{product.discount}%</h1>
              </div>                      
              <div className='md:ml-4 ml-2 sm:mt-4'>
@@ -277,7 +257,7 @@ export default function Home() {
                 <h1 className='text-xs line-through text-white'>{product.initialprice.toLocaleString()}</h1>
               </div>
               <div>
-                <img className='sm:h-16 sm:w-16 md:h-24 md:w-24 lg:h-36 lg:w-36 h-10 w-10' src={iphone} />
+                <img className='sm:h-16 sm:w-16 md:h-24 md:w-24 lg:h-36 lg:w-36 h-10 w-10' src={product.image} />
               </div>
             </div>
             

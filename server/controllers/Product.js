@@ -42,13 +42,6 @@ export const getProducts = async (req,res) =>
 
     try {
         let products = await Product.find({})
-        //  if (req.isAuthenticated()) {
-        //     // User is authenticated, retrieve all products
-        //     products = await Product.find({})
-        // } else {
-        //     // User is not authenticated, send a 401 status code and a message
-        //     return res.status(401).json({ error: "Unauthorized: No token provided" });
-        // }
 
         return res.status(200).json(products)
     } catch (error) {

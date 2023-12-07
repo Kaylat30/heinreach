@@ -5,10 +5,22 @@ import { useState, } from "react";
 import Slider from 'react-slider';
 import { toast } from "react-toastify";
 
-export function loader()
+
+function shuffleArray(array) {
+  
+  const shuffled = [...array]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+export async function loader()
 {
-  let loadedproducts = getProducts()
-  return defer({products:loadedproducts})
+  let loadedproducts = await getProducts()
+  const shuffledProducts = shuffleArray(loadedproducts);
+  return defer({products:shuffledProducts})
 }
 export default function Shop()
 {
@@ -20,7 +32,7 @@ export default function Shop()
   // Initialize the current page state
   const [currentPage, setCurrentPage] = useState(1);
   
-   const [min, max] = [0, 3000000]; 
+   const [min, max] = [0, 7000000]; 
    const [values, setValues] = useState([min, max]);
 
   const handleFilterSubmit = (event) => {
@@ -116,7 +128,7 @@ export default function Shop()
   function renderProductsElements(products)
   {
     // Define the number of safaris to display per page
-    const productsPerPage = 3; 
+    const productsPerPage = 28; 
 
     if (filterProducts(products).length === 0) {
       // Display a message indicating no matching products
@@ -214,11 +226,16 @@ export default function Shop()
              className="shadow-xl w-36 md:w-48 rounded-md m-2"
            >
              <option value="">Select Category</option>
-             <option value="Phones">Phones</option>
+             <option value="Phones & Tablets">Phones & Tablets</option>
+             <option value="TV'S & Audio">TVs & Audio</option>
+             <option value="Appliances">Appliances</option>
              <option value="Fashion">Fashion</option>
-             <option value="Drinks">Drinks</option>
-             <option value="Clothes">Clothes</option>
              <option value="Home">Home</option>
+             <option value="Supermarket">Supermarket</option>
+             <option value="Health & Beauty">Health & Beauty</option>
+             <option value="Baby Products">Baby Products</option>
+             <option value="Gaming">Gaming</option>
+             <option value="Computing">Computing</option>
            </select>
 
            <select

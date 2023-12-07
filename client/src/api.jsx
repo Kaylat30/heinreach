@@ -1,6 +1,9 @@
+//const url = "http://localhost:3000"
+const url = "https://heinreach-server.vercel.app"
+
 export async function getProducts()
 {
-    const res = await fetch("https://heinreach-server.vercel.app/shop")
+    const res = await fetch(`${url}/shop`)
     const data = await res.json()
 
     if (!res.ok) {
@@ -17,7 +20,7 @@ export async function getProducts()
 
 export async function getProductInfo(id)
 {
-    const res = await fetch(`https://heinreach-server.vercel.app/product/${id}`)
+    const res = await fetch(`${url}/product/${id}`)
     const data = await res.json()
 
     if (!res.ok) {
@@ -40,7 +43,7 @@ export async function LoginUser(email,password)
     };
 
     try {
-    const res = await fetch("https://heinreach-server.vercel.app/login", {
+    const res = await fetch(`${url}/login`, {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -77,7 +80,7 @@ export async function registerUser(firstname,lastname,email,password)
       };
   
       try {
-        const res = await fetch("https://heinreach-server.vercel.app/signup", {
+        const res = await fetch(`${url}/signup`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -130,7 +133,7 @@ export async function addCart(id)
 {
 
     try {
-    const res = await fetch("https://heinreach-server.vercel.app/addToCart", {
+    const res = await fetch(`${url}/addToCart`, {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -161,7 +164,7 @@ export async function deleteCart(id)
 {
 
     try {
-    const res = await fetch("https://heinreach-server.vercel.app/deleteCart", {
+    const res = await fetch(`${url}/deleteCart`, {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -191,7 +194,7 @@ export async function deleteCart(id)
 
 export async function getCart()
 {
-    const res = await fetch("https://heinreach-server.vercel.app/cart", {
+    const res = await fetch(`${url}/cart`, {
         method: "POST",
         credentials: 'include',    
   });
@@ -211,7 +214,7 @@ export async function getCart()
 
 export async function updateCartAmount(newAmount, id) {
     try {
-        const res = await fetch("https://heinreach-server.vercel.app/updateCartAmount", {
+        const res = await fetch(`${url}/updateCartAmount`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -239,7 +242,7 @@ export async function updateCartAmount(newAmount, id) {
 
 export async function checkout() {
     try {
-        const response = await fetch('https://heinreach-server.vercel.app/checkout', {
+        const response = await fetch(`${url}/checkout`, {
             method: 'POST',
             credentials: 'include',
         });
