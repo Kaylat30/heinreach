@@ -62,7 +62,7 @@ export default function ProductInfo()
 
   function renderYouMayLikeElements()
   {
-    const YouMayLike = products.filter(product => product.category === loaderData.product.category).slice(0, 8);
+    const YouMayLike = products.filter(product => product.category === loaderData.product.category && product._id !== loaderData.product._id).slice(0, 8);
 
     return(
       <>
