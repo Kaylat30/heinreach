@@ -159,7 +159,7 @@ export default function Shop()
     return(
     <>
       {/* Products section */}          
-      <div className="relative grid lg:grid-cols-4 md:grid-cols-3 xsm:grid-cols-2 items-center bg-white rounded-b-md sm:mx-8 lg:mx-20 space-x-4 ">
+      <div className="relative grid lg:grid-cols-4 md:grid-cols-3 xsm:grid-cols-2 items-center bg-white rounded-b-md xsm:mx-4 sm:mx-8 lg:mx-20 space-x-4 ">
         {currentProducts.map((product) => (
           <div
             key={product._id}
@@ -184,7 +184,7 @@ export default function Shop()
             </Link>            
             <button
               onClick={()=> addToCart(product)}
-              className="block p-3 px-6 w-full md:mt-4 text-white font-bold bg-brightGreen rounded-lg baseline hover:bg-brightGreenLight"
+              className="block  p-3 px-6 w-full md:mt-4 text-white font-bold bg-brightGreen rounded-lg baseline hover:bg-brightGreenLight"
             >
               Add to Cart
             </button>

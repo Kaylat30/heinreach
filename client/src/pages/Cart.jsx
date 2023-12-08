@@ -1,7 +1,6 @@
 import { IoChevronForward,IoChevronBack, IoTrashBin, IoAlertCircleOutline } from "react-icons/io5";
 import { Link,defer,useLoaderData } from "react-router-dom";
 import { getCart, getProducts,deleteCart,updateCartAmount, checkout } from "../api";
-import iphone from "../imgs/pads.jpg" ;
 import { useState,useEffect } from "react";
 import { toast } from "react-toastify";
 import Cookies from 'js-cookie';
@@ -67,10 +66,10 @@ export default function Cart()
 
     return(
       <>
-        {products.slice(0,5).map((product)=>(
+        {products.slice(0,10).map((product)=>(
           <Link to={`/shop/product/${product._id}`} key={product._id} className='my-4 relative inline-block rounded-lg xsm:h-36 xsm:w-30 md:h-64 md:w-44 cursor-pointer hover:scale-105 ease-in-out duration-300 hover:shadow-xl'>
             <div className='flex justify-center'>
-              <img className='rounded-lg xsm:h-20 xsm:w-20 md:w-40 md:h-40' src={iphone}/>
+              <img className='rounded-lg xsm:h-20 xsm:w-20 md:w-40 md:h-40' src={product.image}/>
               <h1 className='absolute bg-gray-200 rounded-sm text-brightGreen top-1 right-2  font-bold xsm:text-sm md:text-md'>-23%</h1>
             </div>                      
             <div className='md:ml-4 ml-2 sm:mt-4'>
@@ -141,7 +140,7 @@ export default function Cart()
           <div key={product._id} className="p-4 border border-l-0 border-r-0 border-t-0">                           
               <div className="flex justify-between flex-wrap ">                            
                   <div className="flex ">
-                      <img className="w-20 h-20" src={iphone} />
+                      <img className="w-20 h-20" src={product.image} />
                       <div>
                       <h1 >{product.name}</h1>
                       <h1 className="text-red-600 text-xs flex items-center space-x-1"><IoAlertCircleOutline/><span>{product.quantity} units left</span></h1>

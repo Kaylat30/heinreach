@@ -1,9 +1,21 @@
 import { useState, useEffect } from 'react';
-import slide_img1 from '../imgs/slide_img1.jpg'; 
-import slide_img2 from '../imgs/slide_img2.jpg'; 
-import slide_img3 from '../imgs/slide_img3.jpg'; 
-import slide_img4 from "../imgs/slide_img4.jpg" 
-import pads from "../imgs/pads.jpg" ;
+// import slide_img1 from '../imgs/slide_img1.jpg'; 
+// import slide_img2 from '../imgs/slide_img2.jpg'; 
+// import slide_img3 from '../imgs/sale3.jpg'; 
+// import slide_img4 from "../imgs/sale4.jpg" 
+import slide_img1 from '../imgs/sale1.webp'; 
+import slide_img2 from '../imgs/sale2.webp'; 
+import slide_img3 from '../imgs/sale3.jpg'; 
+import slide_img4 from "../imgs/sale4.jpg" 
+import slide_img5 from "../imgs/sale5.webp" 
+import appliances from "../imgs/appliances.png" 
+import gaming from "../imgs/gaming.png" 
+import computing from "../imgs/computing.png" 
+import fashion from "../imgs/fashion.png"  
+import home from "../imgs/home.png" 
+import phones from "../imgs/phones.png" 
+import supermarket from "../imgs/supermarket.png" 
+import television from "../imgs/television.png" 
 import design from "../imgs/design.jpg" ;
 import {IoChevronForward,IoChevronBack} from "react-icons/io5";
 import { Link,defer, useLoaderData } from 'react-router-dom';
@@ -76,51 +88,51 @@ export default function Home() {
       image: slide_img4,
     },
     {
-      image: slide_img2,
+      image: slide_img5,
     },
   ];
   const imagescroll = [
     {
-      image: slide_img1, 
+      image: phones, 
       category: "Phones & Tablets",    
     },
     {
-      image: slide_img2,
+      image: appliances,
       category: "Appliances" ,
     },
     {
-      image: slide_img3,
+      image: fashion,
       category: "Fashion",  
     },
     {
-      image: slide_img4,
+      image: home,
       category: "Home", 
     },
     {
-      image: slide_img2,
+      image: supermarket,
       category: "Supermarket",
     },
     {
-      image: slide_img1, 
-      category: "Health & Beauty",     
-    },
-    {
-      image: slide_img2,
-      category: "Baby Products", 
-    },
-    {
-      image: slide_img3,
+      image: gaming,
       category: "Gaming", 
     },
     {
-      image: slide_img4,
+      image: computing,
       category: "Computing",
 
     },
     {
-      image: slide_img2,
+      image: television,
       category: "TV'S & Audio",
     },
+    // {
+    //   image: health, 
+    //   category: "Health & Beauty",     
+    // },
+    // {
+    //   image: baby,
+    //   category: "Baby Products", 
+    // },
   ];
 
   const showSlide = (index) => {
@@ -167,7 +179,7 @@ export default function Home() {
             <div className='flex justify-center sm:mx-8   lg:mx-20 flex-col'>
                 <div className='bg-brightGreenLight h-12 items-center md:text-2xl rounded-t-md text-black  flex justify-between px-1 sm:px-4'>
                   <div className='font-bold'>{cat} </div>
-                  <Link to={`shop?category=${cat}`}> See All</Link>
+                  <Link to={`shop?category=${encodeURIComponent(cat)}`}> See All</Link>
                 </div>
                 <div className='relative flex items-center bg-white rounded-b-md'>
                   <IoChevronBack className=' opacity-50 cursor-pointer hover:opacity-100' onClick={()=>slideLeft(i)} size={40} />
@@ -207,12 +219,12 @@ export default function Home() {
         <>
           {categoryProducts.map((product) => (
             <Link to={`/shop/product/${product._id}`} key={product._id} className='my-4 relative inline-block rounded-lg xsm:h-36 xsm:w-30 md:h-64 md:w-44 cursor-pointer hover:scale-105 ease-in-out duration-300 hover:shadow-xl'>
-            <div className='flex justify-center'>
+            <div className='flex justify-center w-40'>
                <img className='rounded-lg xsm:h-20 xsm:w-20 md:w-40 md:h-40' src={product.image}/>
                <h1 className='absolute bg-gray-200 rounded-sm text-brightGreen top-1 right-2  font-bold xsm:text-sm md:text-md'>-{product.discount}%</h1>
              </div>                      
              <div className='md:ml-4 ml-2 sm:mt-4 '>
-               <h1 className='text-xs md:text-lg'>{product.name}</h1>
+               <p className='text-xs md:text-lg bg-white'>{product.name}</p>
                <h1 className=' font-bold md:text-xl text-sm'>{product.finalprice.toLocaleString()}</h1>
                <h1 className='text-sm hidden md:block line-through'>{product.initialprice.toLocaleString()}</h1>
              </div>
@@ -249,7 +261,7 @@ export default function Home() {
       <>
         {categoryIntro.map((product)=>(
           <div key={product._id} className='relative flex md:m-3 lg:mx-7 m-1 cursor-pointer hover:scale-105 ease-in-out duration-300 hover:shadow-xl'>
-            <img className='h-auto w-auto sm:h-60 sm:w-80 md:h-72 rounded-md' src={design} />
+            <img className='h-auto w-auto sm:h-60 sm:w-96 md:h-72 rounded-md' src={design} />
             <div className='absolute flex flex-wrap-reverse justify-center items-center lg:top-14 lg:left-10 md:top-16 md:left-12 sm:top-12 top-14 left-4'>
               <div>
                 <h1 className='md:text-lg text-sm text-white'>{product.name}</h1>
@@ -257,7 +269,7 @@ export default function Home() {
                 <h1 className='text-xs line-through text-white'>{product.initialprice.toLocaleString()}</h1>
               </div>
               <div>
-                <img className='sm:h-16 sm:w-16 md:h-24 md:w-24 lg:h-36 lg:w-36 h-10 w-10' src={product.image} />
+                <img className='sm:h-20 sm:w-20 md:h-24 md:w-24 lg:h-36 lg:w-36 h-16 w-16 rounded-sm' src={product.image} />
               </div>
             </div>
             
@@ -289,7 +301,7 @@ export default function Home() {
             {/* first slider section */}
             <div>
                 <div className="slideshow-container">       
-                    <img className="slideshow-image w-full" src={currentSlideData.image} alt={`Image ${currentSlide + 1}`} />       
+                    <img className="slideshow-image w-full sm:h-96 h-72" src={currentSlideData.image} alt={`Image ${currentSlide + 1}`} />       
                     <button className="slideshow-button prev rounded-full opacity-0 hover:opacity-100" onClick={prevSlide}>
                     <IoChevronBack/>
                     </button>
@@ -308,8 +320,8 @@ export default function Home() {
                   <div id='slider-1' className='w-full  space-x-4  h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide'>
                   {imagescroll.map((image,index)=>(
                     <Link key={index} to={`shop?category=${image.category}`} className='my-4 relative inline-block rounded-lg xsm:h-20 xsm:w-20 md:h-32 md:w-32'>
-                      <img className='rounded-lg xsm:h-20 xsm:w-20 md:w-32 md:h-32 cursor-pointer hover:scale-105 ease-in-out duration-300' src={pads}/>
-                      <h1 className='absolute text-white md:top-14 md:left-8 xsm:top-8 xsm:left-3 font-bold xsm:text-sm md:text-md'>{image.category}</h1>
+                      <img className='rounded-lg xsm:h-20 xsm:w-20 md:w-32 md:h-32 cursor-pointer hover:scale-105 ease-in-out duration-300' src={image.image}/>
+                      {/* <h1 className='absolute text-white md:top-14 md:left-8 xsm:top-8 xsm:left-3 font-bold xsm:text-sm md:text-md'>{image.category}</h1> */}
                     </Link>
                   ))}
                   </div>

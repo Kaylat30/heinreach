@@ -14,6 +14,10 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Scroll to the top of the page when the location changes
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
  
   useEffect(() => {
     const fetchCart = async () => {

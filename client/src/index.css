@@ -184,11 +184,6 @@
     display: block;
 }
 
-.slideshow-image {
-    max-width: 100%;
-    height: auto;
-}
-
 .slideshow-text {
     position: absolute;
     top: 50%;

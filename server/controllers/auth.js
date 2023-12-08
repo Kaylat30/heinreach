@@ -54,7 +54,7 @@ export const login = (req, res, next) => {
       }); 
 
 
-        // After successful login, check if there are items in the cart with the previous session ID
+       // After successful login, check if there are items in the cart with the previous session ID
         const oldsessionID = req.cookies.previousSessionID;
         
         const cartItemsToUpdate = await Cart.find({ session: oldsessionID });

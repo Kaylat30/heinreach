@@ -1,7 +1,6 @@
 import { IoChevronForward,IoStarHalf,IoStar,IoStarOutline,IoCheckmarkDoneCircleOutline,IoChevronBack } from "react-icons/io5";
 import { Link,defer,useLocation,useLoaderData, Await } from "react-router-dom";
 import { Suspense } from 'react';
-import iphone from "../imgs/pads.jpg" ;
 import { getProductInfo,getProducts,addCart } from "../api";
 import { toast } from "react-toastify";
 
@@ -63,14 +62,14 @@ export default function ProductInfo()
 
   function renderYouMayLikeElements()
   {
-    const YouMayLike = products.filter(product => product.category === loaderData.product.category).slice(0, 3);
+    const YouMayLike = products.filter(product => product.category === loaderData.product.category).slice(0, 8);
 
     return(
       <>
         {YouMayLike.map((product)=>(
           <Link to={`/shop/product/${product._id}`} key={product._id} className='my-4 relative inline-block rounded-lg xsm:h-36 xsm:w-30 md:h-64 md:w-44 cursor-pointer hover:scale-105 ease-in-out duration-300 hover:shadow-xl'>
             <div className='flex justify-center'>
-              <img className='rounded-lg xsm:h-20 xsm:w-20 md:w-40 md:h-40' src={iphone}/>
+              <img className='rounded-lg xsm:h-20 xsm:w-20 md:w-40 md:h-40' src={product.image}/>
               <h1 className='absolute bg-gray-200 rounded-sm text-brightGreen top-1 right-2  font-bold xsm:text-sm md:text-md'>-23%</h1>
             </div>                      
             <div className='md:ml-4 ml-2 sm:mt-4'>
@@ -99,7 +98,7 @@ export default function ProductInfo()
           className="back-button"
           >&larr; <span>Back to {cat} products</span>
         </Link>
-        <section className="bg-white rounded-lg xsm:mx-6 lg:mx-20 items-center md:flex md:flex-auto grid md:grid-cols-2 grid-cols-1 ">
+        <section className="bg-white rounded-lg xsm:mx-6 lg:mx-20 items-center md:flex md:flex-auto grid md:grid-cols-2 grid-cols-1 space-x-5">
             <img className="w-60 h-60 sm:w-auto sm:h-96" src={product.image}/>
             <div className="space-y-4">
                 <h1 className="sm:text-2xl text-lg">{product.name}</h1>
@@ -147,27 +146,27 @@ export default function ProductInfo()
                       sequi obcaecati id facilis eligendi vel ut repellat cupiditate expedita.
                       </p>
                       <div className="flex items-center justify-between">
-                          <h1>10-10-23 by Kayondo</h1>
+                          <h1>1-10-24 by Kayondo</h1>
                           <div className="flex text-brightGreen items-center"><IoCheckmarkDoneCircleOutline/><span>Verified Purchase</span></div>
                       </div>
                   </div>
                   <div className="space-y-3 border border-l-0 border-r-0 border-t-0 m-4">
                       <div className="flex text-brightGreen"><IoStar/><IoStarOutline/><IoStarOutline/><IoStarOutline/><IoStarOutline/></div>
-                      <h1 className="font-bold">I like it</h1>
+                      <h1 className="font-bold">Awesome</h1>
                       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam sit, animi, fugiat dolor minima eos dolorum ea mollitia suscipit
                       </p>
                       <div className="flex items-center justify-between">
-                          <h1>10-10-23 by Kayondo</h1>
+                          <h1>113-09-22 by Sarah</h1>
                           <div className="flex text-brightGreen items-center"><IoCheckmarkDoneCircleOutline/><span>Verified Purchase</span></div>
                       </div>
                   </div>
                   <div className="space-y-3 border border-l-0 border-r-0 border-t-0 m-4">
                       <div className="flex text-brightGreen"><IoStar/><IoStar/><IoStarHalf/><IoStarOutline/><IoStarOutline/></div>
-                      <h1 className="font-bold">I like it</h1>
+                      <h1 className="font-bold">Good</h1>
                       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam sit, animi, fugiat dolor minima eos dolorum ea mollitia suscipit
                       </p>
                       <div className="flex items-center justify-between">
-                          <h1>10-10-23 by Kayondo</h1>
+                          <h1>10-10-23 by Sudais</h1>
                           <div className="flex text-brightGreen items-center"><IoCheckmarkDoneCircleOutline/><span>Verified Purchase</span></div>
                       </div>
                   </div>
