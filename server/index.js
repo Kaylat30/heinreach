@@ -49,6 +49,7 @@
     });
 
 
+    app.set('trust proxy', 1)
     app.use(cookieParser(process.env.JWT_SECRET));
     app.use(flash()) 
     app.use(session({
@@ -59,8 +60,7 @@
         cookie:{
             maxAge: 60000, 
             httpOnly: true,
-            //sameSite: 'None', 
-            //secure: true,       
+            secure:true      
         }
     }))
     app.use(passport.initialize())

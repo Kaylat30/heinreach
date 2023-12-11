@@ -1,6 +1,7 @@
 import { Form, Link,useNavigate,useNavigation ,useActionData} from "react-router-dom"
 import { useState,useEffect } from "react";
 import { registerUser } from '../api';
+import { toast } from "react-toastify";
 
 export async function action({req})
 {
@@ -12,8 +13,15 @@ export async function action({req})
 
     try {
         // Attempt to signup in the user
-        await registerUser(firstname,lastname,email, password);
-    
+        const user = await registerUser(firstname,lastname,email, password);
+        if (user) {
+            toast.success("Account created successfully", {
+              position: "bottom-left",
+            });}else{
+                toast.error("Account was not created ", {
+                    position: "bottom-left",
+                  });
+            }
         return { redirect: "/login" };
       } catch (err) {
         return { error: err.message };

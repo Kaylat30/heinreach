@@ -177,7 +177,7 @@ export default function Shop()
                 <h1 className="absolute bg-gray-200 rounded-sm text-brightGreen top-1 right-2 font-bold text-md sm:text-sm md:text-md">-{product.discount}%</h1>
               </div>
               <div className="ml-2 mt-4">
-                <h1 className="text-lg md:text-lg">{product.name}</h1>
+                <h1 className="text-lg md:text-lg h-20">{product.name}</h1>
                 <h1 className="font-bold text-lg md:text-xl">{product.finalprice.toLocaleString()} UGX</h1>
                 <h1 className="text-sm line-through">{product.initialprice.toLocaleString()} UGX</h1>
               </div>

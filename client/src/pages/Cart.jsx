@@ -53,7 +53,10 @@ export default function Cart()
         toast.success(`${product.name} removed successfully`,{
           position: "bottom-left"
         })
-       }
+       }else{
+        toast.error(`${product.name} not removed `, {
+            position: "bottom-left",
+          });}
       
     } catch (error) {
       console.log(error)

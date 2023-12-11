@@ -9,3 +9,4 @@
     router.patch("/updateCartAmount",updateCartAmount)
     router.post('/checkout',checkAuthenticated,checkout);
     export {getCart,addToCart,deleteCart,updateCartAmount,checkout}
+     
