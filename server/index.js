@@ -14,12 +14,13 @@
     import MongoStore from "connect-mongo";
     import Cart from "./models/Cart.js";
     
-
+    //const url = 'http://localhost:5173'
+    const url = 'https://heinreach.vercel.app'
     // Configurations
     const  app = express()
     app.use(express.json())
     app.use(cors({
-        origin: ['http://localhost:5173', 'https://heinreach.vercel.app'],
+        origin: url,
         methods: ['GET','POST','PATCH','DELETE','PUT'],
         allowedHeaders: ['Content-Type'],
         credentials: true,
@@ -60,7 +61,7 @@
         cookie:{
             maxAge: 60000, 
             httpOnly: true,
-            //secure:true      
+            secure:true      
         }
     }))
     app.use(passport.initialize())
