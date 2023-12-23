@@ -49,12 +49,13 @@
         }
     });
 
-
+    const secret = "hey hey hey"
+    //const secret = process.env.JWT_SECRET
     app.set('trust proxy', 1)
-    app.use(cookieParser(process.env.JWT_SECRET));
+    app.use(cookieParser(secret));
     app.use(flash()) 
     app.use(session({
-        secret: process.env.JWT_SECRET,
+        secret: secret,
         resave: false,
         saveUninitialized: true,
         store: sessionStore,
