@@ -3,9 +3,9 @@ import { useState,useEffect } from "react";
 import { registerUser } from '../api';
 import { toast } from "react-toastify";
 
-export async function action({req})
+export async function action({request})
 {
-    const formData = await req.formData()
+    const formData = await request.formData()
     const firstname = formData.get("firstname")
     const lastname = formData.get("lastname")
     const email = formData.get("email")

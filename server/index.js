@@ -60,7 +60,7 @@
         cookie:{
             maxAge: 60000, 
             httpOnly: true,
-            secure:true      
+            //secure:true      
         }
     }))
     app.use(passport.initialize())
@@ -77,7 +77,7 @@
         }).then(()=>{
             app.listen(PORT, "localhost", ()=> console.log(`Server Port: ${PORT}`))
         }).catch((error)=> console.log(`${error} did not connect`))
-    
+     
 
     // ROUTES
     app.use("/login",login)

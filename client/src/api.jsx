@@ -1,4 +1,4 @@
-// const url = "http://localhost:3000"
+//const url = "http://localhost:3000"
 const url = "https://heinreach-server.vercel.app"
 
 export async function getProducts()
@@ -98,12 +98,6 @@ export async function registerUser(firstname,lastname,email,password)
                 status: res.status
             }
         }
-
-        const { token, user } = data;
-
-        // Store the token and user data in local storage or state for authentication
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", user);
 
         return data;
   
