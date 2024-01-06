@@ -109,7 +109,7 @@ export async function registerUser(firstname,lastname,email,password)
 
 export async function logoutUser() {
     try {
-      const res = await fetch('https://heinreach-server.vercel.app/logout', {
+      const res = await fetch(`${url}/logout`, {
         method: 'POST',
         credentials: 'include' 
       });

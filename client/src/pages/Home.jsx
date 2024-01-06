@@ -55,7 +55,7 @@ export default function Home() {
 
   // Function to calculate the remaining time
   function calculateRemainingTime() {
-    const targetDate = new Date('2024-01-01 00:00:00');
+    const targetDate = new Date('2025-01-01 00:00:00');
     const currentDate = new Date();
     const timeDifference = targetDate - currentDate;
 
@@ -306,7 +306,7 @@ export default function Home() {
 
             {/* categories section */}
             <div className='flex justify-center sm:mx-8   lg:mx-20 flex-col'>
-                <div className='bg-green-700 h-12 items-center md:text-2xl rounded-t-md text-black  flex justify-center'>Categories</div>
+                <div className='bg-green-700 h-12 items-center md:text-2xl rounded-t-md text-white  flex justify-center'>Categories</div>
                 <div className='relative flex items-center bg-white rounded-b-md'>
                   <IoChevronBack className=' opacity-50 cursor-pointer hover:opacity-100' onClick={()=>slideLeft(-1)} size={40} />
                   <div id='slider-1' className='w-full  space-x-4  h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide'>

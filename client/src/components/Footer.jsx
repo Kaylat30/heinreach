@@ -3,6 +3,7 @@ import { IoLogoFacebook,IoLogoTwitter,IoLogoYoutube,IoLogoPinterest,IoLogoInstag
 import image from '../imgs/logo.png';
 export default function Footer()
 {
+    const currentYear = new Date().getFullYear();
     return(
         <>
            
@@ -52,7 +53,7 @@ export default function Footer()
                     <Link to="/"> <IoLogoInstagram /> </Link>
                 </div>
                 <div className=" text-white ">
-                    Copyright &copy; 2023, All Rights Reserved 
+                    Copyright &copy; {currentYear}, All Rights Reserved 
                 </div>                
             </div>
             

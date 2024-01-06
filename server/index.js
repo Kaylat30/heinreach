@@ -59,11 +59,12 @@ sessionStore.on('expired', async (session) => {
 });
 
 
-app.set('trust proxy', 1)
+//app.set('trust proxy', 1)
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(flash()) 
 app.use(session({
     secret: process.env.JWT_SECRET,
+    name: 'sessionId',
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
