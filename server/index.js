@@ -59,21 +59,22 @@ sessionStore.on('expired', async (session) => {
 });
 
 
-//app.set('trust proxy', 1)
-app.use(cookieParser(process.env.JWT_SECRET));
+app.set('trust proxy', 1)
 app.use(flash()) 
 app.use(session({
     secret: process.env.JWT_SECRET,
     name: 'sessionId',
-    resave: false,
+    resave: false, 
     saveUninitialized: true,
     store: sessionStore,
     cookie:{
         maxAge: 60000, 
         httpOnly: true,
-        secure:true      
+        secure:true,   
+        sameSite: 'none'  
     }
 }))
+app.use(cookieParser(process.env.JWT_SECRET));
 app.use(passport.initialize())
 app.use(passport.session())    
 

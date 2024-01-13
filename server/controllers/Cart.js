@@ -35,7 +35,7 @@ export const addToCart = async (req, res) => {
           res.cookie('previousSessionID', sessionID ,{
               maxAge: 60000, // Set an appropriate maxAge
               httpOnly: true, // For security
-             // secure: true,
+              secure: true,
             });
           
             // Create a new cart item 
