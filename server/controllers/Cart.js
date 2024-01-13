@@ -36,6 +36,7 @@ export const addToCart = async (req, res) => {
               maxAge: 60000, // Set an appropriate maxAge
               httpOnly: true, // For security
               secure: true,
+              sameSite: 'none'
             });
           
             // Create a new cart item 

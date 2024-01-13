@@ -52,6 +52,7 @@ export const login = (req, res, next) => {
       res.cookie('firstname', JSON.stringify({firstname:user.firstname}), {
         maxAge: 60000, 
         secure: true,
+        sameSite: 'none'
       }); 
 
 

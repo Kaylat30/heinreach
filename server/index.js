@@ -64,7 +64,7 @@ app.use(flash())
 app.use(session({
     secret: process.env.JWT_SECRET,
     name: 'sessionId',
-    resave: false, 
+    resave: false,
     saveUninitialized: true,
     store: sessionStore,
     cookie:{
