@@ -70,8 +70,8 @@ app.use(session({
     cookie:{
         maxAge: 60000, 
         httpOnly: true,
-        secure:true,   
-        sameSite: 'none'  
+        // secure:true,   
+        // sameSite: 'none'  
     }
 }))
 app.use(cookieParser(process.env.JWT_SECRET));

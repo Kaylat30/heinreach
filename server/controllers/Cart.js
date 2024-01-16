@@ -36,7 +36,9 @@ export const addToCart = async (req, res) => {
               maxAge: 60000, // Set an appropriate maxAge
               httpOnly: true, // For security
               secure: true,
-              sameSite: 'none'
+              sameSite: 'none',
+              domain: 'https://heinreach.vercel.app',
+              path: '/'
             });
           
             // Create a new cart item 
