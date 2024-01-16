@@ -35,8 +35,8 @@ export const addToCart = async (req, res) => {
           res.cookie('previousSessionID', sessionID ,{
               maxAge: 60000, // Set an appropriate maxAge
               httpOnly: true, // For security
-              secure: process.env.NODE_ENV === 'production' ? 'true':'false',
-              sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', 
+              secure: true,
+              sameSite: none, 
               domain: 'heinreach.vercel.app',
               path: '/'
             });

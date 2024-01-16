@@ -51,9 +51,9 @@ export const login = (req, res, next) => {
  
       res.cookie('firstname', JSON.stringify({firstname:user.firstname}), {
         maxAge: 60000, 
-        secure: process.env.NODE_ENV === 'production' ? 'true':'false',
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', 
-        domain: 'heinreach.vercel.app',
+        secure: true,
+        sameSite: none,  
+        //domain: 'heinreach.vercel.app',
         path: '/'
       }); 
 

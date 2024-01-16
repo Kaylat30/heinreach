@@ -10,7 +10,6 @@ import flash from "express-flash";
 import passport from "passport";
 import cookieParser from "cookie-parser";
 import { initializePassport } from "./middleware/passport.js";
-//import MongoStore from "connect-mongo";
 import Cart from "./models/Cart.js";
 import session from 'express-session';
 import MongoDBStore from 'connect-mongodb-session';
@@ -32,13 +31,7 @@ dotenv.config(); // Load environment variables from .env file
 //MIDDLEWARE 
 //AUTHENTICATION    
 
-initializePassport(passport)
-// const sessionStore = new MongoStore({
-//     mongoUrl: process.env.MONGO_URL, // MongoDB connection URL
-//     collectionName: 'sessions', // Collection to store sessions in
-//     autoRemove: 'interval', // Automatically remove expired sessions
-//     autoRemoveInterval: 1, // Interval in minutes for session cleanup
-// });   
+initializePassport(passport)   
 
 const sessionStore = new (MongoDBStore(session))({
     uri: process.env.MONGO_URL, // MongoDB connection URL
@@ -70,8 +63,8 @@ app.use(session({
     cookie:{
         maxAge: 60000, 
         httpOnly: true,
-        // secure:true,   
-        // sameSite: 'none'  
+        secure:true,   
+        sameSite: 'none'  
     }
 }))
 app.use(cookieParser(process.env.JWT_SECRET));
