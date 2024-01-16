@@ -64,7 +64,7 @@ app.use(session({
         maxAge: 60000, 
         httpOnly: true,
         secure:true,   
-        // sameSite: 'none'  
+        sameSite: 'none'  
     }
 }))
 app.use(cookieParser(process.env.JWT_SECRET));
