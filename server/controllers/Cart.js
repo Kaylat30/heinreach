@@ -37,8 +37,8 @@ export const addToCart = async (req, res) => {
               httpOnly: true, // For security
               secure: true,
               sameSite: none, 
-              domain: 'heinreach.vercel.app',
-              path: '/'
+              // domain: 'heinreach.vercel.app',
+              // path: '/'
             });
           
             // Create a new cart item 
