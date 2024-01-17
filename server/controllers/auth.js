@@ -53,8 +53,8 @@ export const login = (req, res, next) => {
         maxAge: 60000, 
         secure: true,
         sameSite: none,  
-        // domain: 'heinreach.vercel.app',
-        // path: '/'
+        domain: 'heinreach.vercel.app',
+        path: '/login'
       }); 
 
 

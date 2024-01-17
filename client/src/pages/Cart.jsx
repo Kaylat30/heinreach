@@ -100,9 +100,9 @@ export default function Cart()
       
       await checkout();
   
-       toast.success("Checked out successfully",{
-         position: "bottom-left"
-       })
+      toast.success("Checked out successfully",{
+        position: "bottom-left"
+      })       
       
      
    } catch (error) {
