@@ -36,6 +36,8 @@ export const addToCart = async (req, res) => {
               maxAge: 60000, // Set an appropriate maxAge
               httpOnly: true, // For security
               secure: true,
+              //path: '/',
+              sameSite: 'none'
             });
           
             // Create a new cart item 
@@ -66,7 +68,7 @@ export const addToCart = async (req, res) => {
 export const getCart = async (req, res) => {
     try {
 
-      const query =req.user
+      const query = req.user
       ? { user: req.user._id }
       : { session: req.sessionID } 
    
