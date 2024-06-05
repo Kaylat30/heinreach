@@ -49,11 +49,11 @@ export const login = (req, res, next) => {
           return res.status(500).json({ error: err.message });
         }        
  
-      res.cookie('firstname', JSON.stringify({firstname:user.firstname}), {
-        maxAge: 60000, 
-        secure: true,
-        sameSite: 'none'  
-      }); 
+      // res.cookie('firstname', JSON.stringify({firstname:user.firstname}), {
+      //   maxAge: 60000, 
+      //   // secure: true,
+      //   // sameSite: 'none'  
+      // }); 
 
 
        // After successful login, check if there are items in the cart with the previous session ID
@@ -70,7 +70,7 @@ export const login = (req, res, next) => {
             );
         }
          
-        res.status(200).json({success : true , message: "logged in successfully" });
+        res.status(200).json({success : true , message: "logged in successfully", firstName: user.firstname });
       });
     
     })(req, res, next); 

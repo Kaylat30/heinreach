@@ -1,5 +1,5 @@
-//const url = "http://localhost:3000"
-const url = "https://heinreach-server.vercel.app"
+//export const url = "http://localhost:3001"
+export const url = "https://heinreach-server.vercel.app"
 
 export async function getProducts()
 {

@@ -1,3 +1,6 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {  logout, selectSessionExpiresAt } from './slice/userSlice';
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom"
 import Error from './components/Error'
 import Layout  from './components/Layout'
@@ -11,7 +14,7 @@ import ProductInfo,{loader as productInfoLoader} from "./pages/ProductInfo"
 import Login, { action as loginAction} from "./pages/Login"
 import Signup, {action as signupAction} from "./pages/Signup"
 import { ToastContainer,   } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const router = createBrowserRouter(createRoutesFromElements(
   
@@ -28,6 +31,22 @@ const router = createBrowserRouter(createRoutesFromElements(
   </Route>
 ))
 export default function App(){
+
+  const dispatch = useDispatch();
+  const sessionExpiresAt = useSelector(selectSessionExpiresAt);
+  //const user = useSelector(selectUser);
+
+  useEffect(() => {
+    const checkSessionExpiry = () => {
+      if (sessionExpiresAt && Date.now() > sessionExpiresAt) {
+        dispatch(logout());
+      }
+    };
+
+    const intervalId = setInterval(checkSessionExpiry, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [dispatch, sessionExpiresAt]);
   return(
     <>
       <ToastContainer />

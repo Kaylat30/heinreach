@@ -15,7 +15,7 @@ import session from 'express-session';
 import MongoDBStore from 'connect-mongodb-session';
 
 
-//const url = 'http://localhost:5173'
+//const url = 'http://localhost:5174'
 const url = 'https://heinreach.vercel.app'
 // Configurations
 const  app = express()
@@ -63,7 +63,7 @@ app.use(session({
     cookie:{
         maxAge: 60000, 
         httpOnly: true,
-        secure:true,   
+        secure:true,    
         sameSite: 'none'  
     }
 }))
