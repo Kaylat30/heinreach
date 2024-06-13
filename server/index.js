@@ -37,7 +37,7 @@ const sessionStore = new (MongoDBStore(session))({
     uri: process.env.MONGO_URL, // MongoDB connection URL
     collection: 'sessions', // Collection to store sessions in
     autoRemove: 'interval', // Automatically remove expired sessions
-    autoRemoveInterval: 1, // Interval in minutes for session cleanup
+    autoRemoveInterval: 5, // Interval in minutes for session cleanup
 }); 
 
 // Remove cart items for expired sessions
@@ -61,7 +61,7 @@ app.use(session({
     saveUninitialized: true,
     store: sessionStore,
     cookie:{
-        maxAge: 60000, 
+        maxAge: 300000, 
         httpOnly: true,
         secure:true,    
         sameSite: 'none'  
